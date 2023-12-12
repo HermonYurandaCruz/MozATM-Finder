@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 export default function TabScreen() {
   return (
     <Tab.Navigator
-    screenOptions={({ route }) => ({
+    screenOptions={ ({ route}) => ({
       tabBarIcon: ({ focused, color, size }) => {
         let iconName;
     
@@ -34,13 +34,13 @@ export default function TabScreen() {
       },
     })}
     tabBarOptions={{
-      activeTintColor: '#29524A', 
+      activeTintColor: '#29524A',
     }}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="ListBank" component={ListBank} />
-      <Tab.Screen name="Map" component={Map} />
-      <Tab.Screen name="Settings" component={Setting} />
+      <Tab.Screen name="Home" component={Home}  options={{ headerShown: false }}  />
+      <Tab.Screen name="ListBank" component={ListBank}  options={{ headerShown: false }}  />
+      <Tab.Screen name="Map" component={Map}  options={{ headerShown: false }}  />
+      <Tab.Screen name="Settings" component={Setting}  options={{ headerShown: false }}  />
 
     </Tab.Navigator>
   );

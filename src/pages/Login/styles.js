@@ -62,7 +62,7 @@ export default StyleSheet.create({
       },
       button: {
         borderRadius: 8,
-        paddingVertical: 10,
+        paddingVertical: 15,
         paddingHorizontal: 20,
         backgroundColor: '#254E46',
       },
@@ -109,6 +109,11 @@ export default StyleSheet.create({
       icon: {
         width: 24,
         height: 24,
-      }
+      },
+      errorText:{
+        color:"#DD5757",
+        marginTop:4,
+        fontWeight:"600"
+      },
 
 });
