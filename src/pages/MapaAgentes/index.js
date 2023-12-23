@@ -7,12 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 
 import api from '../../services/api'
 
-import { Image,TouchableOpacity, ActivityIndicator,Text, View, StyleSheet } from 'react-native';
+import { Image,TouchableOpacity, Text,ActivityIndicator, View, StyleSheet } from 'react-native';
 import styles from './styles';
 import gif from '../../../src/assets/giftMap.gif'
 
 
-export default function Map(){
+export default function MapaAgentes(){
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -20,20 +20,12 @@ export default function Map(){
 
 
   async function loadMaly(){
-    const response= await api.get('maly');
+    const response = await api.get(`/maly/searchMalyByTipo?tipo=${"Agente"}`);
     setMaly(response.data)
   }
 
   
   const navigation = useNavigation();
-
-  const addBank=() => {
-    navigation.navigate('AddBank');
-  };
-  const handleMarkerPress = (id) => {
-    navigation.navigate('InfoATM', { itemId: id });
-  };
-
 
   useEffect(() => {
     loadMaly();
@@ -86,6 +78,7 @@ export default function Map(){
 
   return (
     <View style={styles.container}>
+    
       {location ? (
         <MapView
           ref={mapRef}
@@ -109,22 +102,26 @@ export default function Map(){
       title={item.nomeInstituicao}
       description={item.nomePropretario}
     >
-        <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
-          <Image style={{ width: 30, height: 30, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao }} />
-        </TouchableOpacity>    
-        </Marker>
+      <Image style={{ width: 30, height: 30, borderRadius:100 }} source={{ uri: item.foto_urlInstituicao }} />
+
+    </Marker>
   ))}
         </MapView>
       ) : (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Image style={{ width: 350, height: 350, borderRadius:100 }} source={gif}/>
-          <Text style={styles.textEspera}>Aguardando a obtenção da localização...</Text>
-          <ActivityIndicator size="large" color="#B0BEC5" />
-        </View>  
-        )}
-      <TouchableOpacity style={styles.buttonAdd} onPress={addBank}>
-      <Ionicons name="md-add-circle-outline" size={56} color="rgba(15, 82, 87, 1)" />    
-      </TouchableOpacity>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        
+        <Image style={{ width: 350, height: 350, borderRadius:100 }} source={gif}/>
+        <Text style={styles.textEspera}>Aguardando a obtenção da localização...</Text>
+        <ActivityIndicator size="large" color="#B0BEC5" />
+
+      </View>      
+      )}
+
+       <TouchableOpacity style={styles.voltar} onPress={()=>navigation.goBack()}>  
+        <Ionicons name="arrow-back-outline" size={24} color="black"  />
+        </TouchableOpacity>
+
+
       
       <TouchableOpacity style={styles.button} onPress={getLocation}>
       <Ionicons name="locate-sharp" size={56} color="rgba(15, 82, 87, 1)" />

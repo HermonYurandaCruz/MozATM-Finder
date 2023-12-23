@@ -1,5 +1,5 @@
 import React, {useEffect,useState} from "react";
-import {Image,View,ScrollView,Text,TextInput,TouchableOpacity, FlatList} from 'react-native';
+import {Image,View,ActivityIndicator,Text,TextInput,TouchableOpacity, FlatList} from 'react-native';
 
 import styles from './styles';
 import { MaterialCommunityIcons ,Feather,AntDesign ,Entypo  } from '@expo/vector-icons';
@@ -11,6 +11,7 @@ import bankInfra from '../../../src/assets/bankInfra.png'
 
 export default function ListBank(){
   const [instituicoes,setInstituicoes] = useState([])
+  const [loading, setLoading] = useState(true);
 
   async function loadInstituicoes(){
     const response= await api.get('instituicoes');
@@ -43,17 +44,25 @@ export default function ListBank(){
             keyExtractor={instituicao=> String(instituicao.idInstituicao)} 
             renderItem={({item:instituicao})=>(
               <View  style={styles.CardBank}>
-                
-              <Image style={styles.imgBank} source={{ uri:instituicao.foto_url }} />
+                {loading && (
+                  <ActivityIndicator size="small"  color="#000" style={styles.loadingIndicator} />
+                )}
+                <Image
+                  style={styles.imgBank}
+                  source={{ uri:instituicao.foto_url }}
+                  onLoadEnd={() => setLoading(false)} 
+                />
+
+
               <View style={styles.infoBank}>
                 <Text style={styles.TextNomeBank}>{instituicao.nome}</Text>
 
                 <View style={styles.Hora}>
                   <Text>
-                  <AntDesign name="heart" size={22} color="rgba(221, 87, 87, 1)" /> 
+                  <AntDesign name="heart" size={18} color="rgba(221, 87, 87, 1)" /> 
                   </Text>
-                  <Text>
-                  {instituicao.cutidas}
+                  <Text style={styles.curtidasText}>
+                  {instituicao.curtidas}
                   </Text>
                 </View> 
               </View>
@@ -65,7 +74,7 @@ export default function ListBank(){
             >
             
 
-            </FlatList>
+          </FlatList>
       </View>
     )
 }

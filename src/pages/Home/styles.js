@@ -18,16 +18,16 @@ export default StyleSheet.create({
     right: 0
     },
     TextOla:{
-        fontSize:17,
-        fontWeight:"500",
-        color:"#19191B",
-        marginStart:12
-    },
+        fontSize:14,
+        fontWeight:"400",
+        color:"rgba(147, 147, 147, 1)",
+        marginStart:6
+        },
     UserName:{
-        fontSize:17,
+        fontSize:18,
         fontWeight:"500",
         color:"#19191B",
-        marginStart:4
+        marginStart:6
     },
 
     inputPesquisa:{
@@ -72,8 +72,12 @@ export default StyleSheet.create({
         fontWeight:"500",
         color:"#19191B",
     },
+    
+    loadingLista:{
+        paddingBottom:"50%",
 
 
+    },
 
     infoBank:{
         marginStart:6
@@ -86,6 +90,7 @@ export default StyleSheet.create({
         paddingHorizontal:12,
         marginTop:8
     },
+  
     Hora:{
         flexDirection:"row",
         alignItems:"center"
@@ -110,6 +115,7 @@ export default StyleSheet.create({
         marginTop:12,
         width: 64,
         height: 64,
+        borderRadius:8
     },
     
     TextNomeBank:{
@@ -117,13 +123,19 @@ export default StyleSheet.create({
         fontWeight:"600",
 
     },
+        loadingIndicator:{
+        position:"absolute",
+        paddingTop:"100%",
+        paddingStart:"80%"
+    },
     TextTypoBank:{
         fontSize:14,
         fontWeight:"400",
     },
     TextAndereco:{
         marginTop:2
-    }
+    },
+
 
 
 });

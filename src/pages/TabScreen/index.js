@@ -26,8 +26,8 @@ export default function TabScreen() {
           iconName = focused ? 'list' : 'list';
         }else if (route.name === 'Map') {
           iconName = focused ? 'map' : 'map-outline';
-        }else if (route.name === 'Settings') {
-          iconName = focused ? 'settings' : 'settings-outline';
+        }else if (route.name === 'Perfil') {
+          iconName = focused ? 'person' : 'person-outline';
         }
 
         return <Ionicons name={iconName} size={size} color={color} />;
@@ -40,7 +40,7 @@ export default function TabScreen() {
       <Tab.Screen name="Home" component={Home}  options={{ headerShown: false }}  />
       <Tab.Screen name="ListBank" component={ListBank}  options={{ headerShown: false }}  />
       <Tab.Screen name="Map" component={Map}  options={{ headerShown: false }}  />
-      <Tab.Screen name="Settings" component={Setting}  options={{ headerShown: false }}  />
+      <Tab.Screen name="Perfil" component={Setting}  options={{ headerShown: false }}  />
 
     </Tab.Navigator>
   );

@@ -16,6 +16,11 @@ export default StyleSheet.create({
         position:"absolute",
         right:0
     },
+    loadingIndicator:{
+        position:"absolute",
+        paddingTop:200,
+        paddingStart:"65%"
+    },
     ImagemBank:{
         width:"100%",
         height: "30%",
@@ -92,8 +97,10 @@ export default StyleSheet.create({
     },
     comentario:{
         flexDirection:"row",
-        marginTop:16
-
+        marginTop:16,
+    },
+    caixaComentarios:{
+        marginBottom:100
     },
     dadosComentario:{
         marginStart:6
@@ -105,12 +112,13 @@ export default StyleSheet.create({
     caixaComentario:{
         backgroundColor:"rgba(235, 235, 235, 1)",
         padding:8,
-        borderRadius:8
+        borderRadius:8,
+        marginEnd:42
 
     },
 
     conteudoComentario:{
-        fontSize:13,
+        fontSize:14,
         fontWeight:"400",
     },
     Data:{

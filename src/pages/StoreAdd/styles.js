@@ -77,14 +77,14 @@ export default StyleSheet.create({
     },
 
     buttonsCard:{
-        flexDirection:"row"
+        flexDirection:"row",
     },
 
 
     imgBank:{
         marginTop:4,
-        width: 48,
-        height: 48,
+        width: 64,
+        height: 64,
         borderRadius:4
     },
     
@@ -98,6 +98,9 @@ export default StyleSheet.create({
     },
     TextAndereco:{
         marginTop:2
+    },
+    buttonDireção:{
+        marginEnd:8
     }
 
 

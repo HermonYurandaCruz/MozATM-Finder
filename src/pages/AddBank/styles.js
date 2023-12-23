@@ -9,6 +9,7 @@ export default StyleSheet.create({
         flex:1,
         paddingHorizontal:24,
         paddingTop:Constants.statusBarHeight+16 ,
+        
     },
     heade:{
         flexDirection:"row",
@@ -19,8 +20,8 @@ export default StyleSheet.create({
         fontWeight:"600"
     },
     Titulo:{
-        fontSize:16,
-        fontWeight:"00",
+        fontSize:18,
+        fontWeight:"500",
         marginTop:8,
         marginTop:16
     },
@@ -73,6 +74,15 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingHorizontal: 8,
       },
+      
+      input: {
+        marginTop:12,
+        borderBottomWidth: 2, // Define a largura da linha na parte inferior
+        borderBottomColor: '#254E46', // Define a cor da linha
+        marginBottom: 20,
+        paddingBottom: 12, // Espaçamento entre o texto e a linha
+        fontSize:16
+      },
       icon: {
         marginRight: 5,
       },
@@ -99,4 +109,33 @@ export default StyleSheet.create({
         height: 40,
         fontSize: 16,
       },
+      
+      modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Define um fundo escuro transparente
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        elevation: 5,
+        marginTop:"75%",
+        marginHorizontal:32,
+
+      },
+      titlePopUp: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom:4
+      },
+      buttonPopUP:{
+        borderRadius: 8,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        backgroundColor: '#254E46',
+        marginTop:8
+      }
 });

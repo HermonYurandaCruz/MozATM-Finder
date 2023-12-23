@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation,CommonActions  } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import api from '../../services/api'
 
@@ -23,42 +23,55 @@ export default function Login(){
     const [errorText, setErrorText] = useState('');
 
 
+    const checkIfUserLoggedIn = async () => {
+      try {
+        const userId = await AsyncStorage.getItem('userId');
+        if (userId) {
+          // Se houver um ID de usuário salvo, navegue diretamente para a tela 'TabScreen'
+          navigation.navigate('TabScreen', { userId });
+        }
+      } catch (error) {
+        console.error('Erro ao verificar usuário logado:', error);
+      }
+    };
+    
+    // Chame esta função no início do seu aplicativo
+    checkIfUserLoggedIn();
+
+
     const handleLoginPress = async () => {
       if (!email || !senha) {
         setErrorText('Por favor, preencha todos os campos.');
         return;
       }
-
-      
-    try {
-      setLoading(true);
-      setShowText(false);
-      setErrorText(''); // Limpa qualquer mensagem de erro anterior
-
+    
+      try {
+        setLoading(true);
+        setShowText(false);
+        setErrorText(''); // Limpa qualquer mensagem de erro anterior
+    
         const response = await api.post('/login', {
           email,
           senha,
-          
         });
-        // Aqui você pode tratar a resposta da API conforme necessário
-        console.log('Usuário logado:', response.data);
-
-        await AsyncStorage.setItem('userData', JSON.stringify(response.data));
-
-        navigation.navigate('TabScreen');
-        // Talvez redirecionar para outra tela ou mostrar uma mensagem de sucesso
-      } catch (error) {
-          console.error('Erro ao logar usuário:', error);
-          setErrorText('Erro ao efectuar Login. Por favor, tente novamente.'); // Define mensagem de erro
     
+        console.log('Usuário logado:', response.data);
+        await AsyncStorage.setItem('userId', response.data.idUser);
+
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: "TabScreen", params: { userId: response.data.idUser } }],
+          })
+        );
+      } catch (error) {
+        console.error('Erro ao logar usuário:', error);
+        setErrorText('Erro ao efetuar Login. Por favor, tente novamente.'); // Define mensagem de erro
       } finally {
-          setLoading(false);
-          setShowText(true);
-        }
-
-
-
-      };
+        setLoading(false);
+        setShowText(true);
+      }
+    };
     
       const handleRegisterPress = () => {
         navigation.navigate('Register');
@@ -68,11 +81,11 @@ export default function Login(){
         
         <View style={styles.container}>
         
-        <View style={styles.containerLogo}>
-            <Image style={styles.logoImag} source={logoImg}/>
-            <Text style={styles.TextBemVindo}>Seja bem vindo ao</Text>
-            <Text style={styles.TextBold}>MozATM Finder</Text>
-        </View>
+            <View style={styles.containerLogo}>
+                <Image style={styles.logoImag} source={logoImg}/>
+                <Text style={styles.TextBemVindo}>Seja bem vindo ao</Text>
+                <Text style={styles.TextBold}>MozATM Finder</Text>
+            </View>
          
             <View style={styles.formLogin}>
                
