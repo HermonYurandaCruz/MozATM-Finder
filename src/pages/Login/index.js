@@ -3,7 +3,7 @@ import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'r
 import { useNavigation,CommonActions  } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import api from '../../services/api'
+import {firebase} from '../../services/firebaseConfig'
 
 import styles from './styles';
 
@@ -50,20 +50,18 @@ export default function Login(){
         setShowText(false);
         setErrorText(''); // Limpa qualquer mensagem de erro anterior
     
-        const response = await api.post('/login', {
-          email,
-          senha,
-        });
-    
-        console.log('Usuário logado:', response.data);
-        await AsyncStorage.setItem('userId', response.data.idUser);
+        const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
+        
+          const userDoc = await firebase.firestore().collection('users').doc(userCredential.user.uid).get();
+          if (userDoc.exists) {
+            const userData = { id: userCredential.user.uid, ...userDoc.data() };
+            console.log('Dados do usuário:', userData);
+            await AsyncStorage.setItem('userData', JSON.stringify(userData));
+            navigation.navigate('TabScreen');
+          }
 
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: "TabScreen", params: { userId: response.data.idUser } }],
-          })
-        );
+        return userCredential.user;
+
       } catch (error) {
         console.error('Erro ao logar usuário:', error);
         setErrorText('Erro ao efetuar Login. Por favor, tente novamente.'); // Define mensagem de erro

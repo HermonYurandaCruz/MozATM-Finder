@@ -4,9 +4,9 @@ import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 
-import { Ionicons,Feather,MaterialCommunityIcons,Entypo  } from '@expo/vector-icons';
+import { EvilIcons ,Ionicons,Feather,MaterialCommunityIcons,Entypo  } from '@expo/vector-icons';
 
-import api from '../../services/api'
+import {firebase} from '../../services/firebaseConfig'
 
 import imgATM from '../../../src/assets/ATM.png'
 import imgBank from '../../../src/assets/Bank.png'
@@ -21,14 +21,29 @@ export default function Home(){
 
   const navigation = useNavigation();
   const [userName, setUserName] = useState('');
-  const [contacto, setContacto] = useState('');
+  const [userData, setUserData] = useState(null);
 
   const [maly,setMaly]= useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingLista, setLoadingLista] = useState(true);
 
 
+  const refreshList=async()=>{
+    loadMalyProximos();
+    
+  }
+  const retrieveUserData = async () => {
+    try {
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData !== null) {
+        setUserData(JSON.parse(storedUserData));
 
+      }
+    } catch (error) {
+      console.error('Erro ao recuperar os dados do usuário:', error);
+      // Tratar erros ao recuperar dados do AsyncStorage
+    }
+  };
 
   function calcularDistancia(lat1, lon1, lat2, lon2) {
     const raioTerra = 6371; 
@@ -78,9 +93,19 @@ async function loadMalyProximos() {
     if (location) {
       const { latitude, longitude } = location.coords;
 
-      // Carregar os MAly do tipo "Banco/ATM"
-      const response = await api.get(`/maly/searchMalyByTipo?tipo=${"Banco/ATM"}`);
-      const malys = response.data;
+      // Obter a referência para a coleção 'maly' no Firestore
+      const malyRef = firebase.firestore().collection('maly');
+
+      // Buscar os MAly do tipo "Banco/ATM"
+      const querySnapshot = await malyRef
+      .where('tipoMaly', 'in', ['Banco', 'ATM'])
+      .where('estado', '==', "1")
+      .get();
+      const malys = [];
+      
+      querySnapshot.forEach((doc) => {
+        malys.push({ id: doc.id, ...doc.data() });
+      });
 
       // Ordenar os MAly por proximidade com base na localização do usuário
       const malysProximos = await ordenarMalyPorProximidade(malys, latitude, longitude);
@@ -93,7 +118,6 @@ async function loadMalyProximos() {
     console.error('Erro ao obter localização ou carregar MAly:', error);
   }
 }
-
 
 
   const handleInformacoes = (id) => {
@@ -130,43 +154,11 @@ const openInMap=(lat,log)=>{
 }
 
 
-const getUserData = async (userId) => {
-  try {
-    const response = await api.get(`/user/searchUserById?id=${userId}`);
-    return response.data; // Retorna os dados do usuário
-  } catch (error) {
-    console.error('Erro ao buscar usuário:', error);
-    throw error;
-  }
-};
-  
-const fetchUserData = async () => {
-  try {
-    const userId = await AsyncStorage.getItem('userId');
-
-    if (userId) {
-      const userData = await getUserData(userId);
-      
-      if (userData && userData.nome) {
-        setUserName(userData.nome);
-      } else {
-        console.error('Campo "nome" não encontrado ou está vazio nos dados do usuário.');
-      }
-      // Faça algo com os dados do usuário aqui
-    } else {
-      console.error('ID do usuário não encontrado.');
-    }
-  
-    // Supondo que userData contenha um campo 'name' representando o nome do usuário
-  } catch (error) {
-    // Trate o erro, se necessário
-  }
-};
-
 
   useEffect(() => {
-    fetchUserData();
     loadMalyProximos();
+    retrieveUserData();
+    
     
   }, []);
 
@@ -182,7 +174,11 @@ const fetchUserData = async () => {
             <Image style={styles.logoImag} source={perfilImg}/>
             <View>
               <Text style={styles.TextOla}>Bem-vindo de volta,</Text>
-              <Text style={styles.UserName}>{userName}</Text>
+              {userData && (
+                <>
+              <Text style={styles.UserName}>{userData.nome}</Text>
+              </>
+              )}
             </View>
            
             <Ionicons style={styles.iconNotification} name="notifications-outline" size={24} color="black"  />
@@ -225,7 +221,13 @@ const fetchUserData = async () => {
 
           </View>
 
-          <Text style={styles.TextLista}>Bancos/ATMs Perto de si</Text>
+          <View style={styles.estiloRefre}>
+              <Text style={styles.TextLista}>Bancos/ATMs Perto de si</Text>
+              <TouchableOpacity onPress={refreshList}>
+              <EvilIcons name="refresh" size={32} color="black" />
+              </TouchableOpacity>
+          </View>
+
           <FlatList
           
           data={maly}

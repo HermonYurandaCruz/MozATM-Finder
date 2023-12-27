@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 
-import api from '../../services/api'
+import {firebase} from '../../services/firebaseConfig'
 
 import { Image,TouchableOpacity, Text,ActivityIndicator, View, StyleSheet } from 'react-native';
 import styles from './styles';
@@ -20,8 +20,19 @@ export default function MapaAgentes(){
 
 
   async function loadMaly(){
-    const response = await api.get(`/maly/searchMalyByTipo?tipo=${"Agente"}`);
-    setMaly(response.data)
+    const malyRef = firebase.firestore().collection('maly');
+
+    const querySnapshot = await malyRef
+    .where('tipoMaly', '==', 'Agente')
+    .where('estado', '==', "1")
+    .get();
+    const malys = [];
+
+    querySnapshot.forEach((doc) => {
+      malys.push({ id: doc.id, ...doc.data() });
+    });
+
+    setMaly(malys)
   }
 
   

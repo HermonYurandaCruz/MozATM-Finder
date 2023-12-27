@@ -67,16 +67,10 @@ export default StyleSheet.create({
         marginTop:4
     },
     TextLista:{
+        marginTop:16,
         fontSize:17,
         fontWeight:"500",
         color:"#19191B",
-    },
-    estiloRefre:{
-        marginTop:16,
-        flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"space-between"
-        
     },
     
     loadingLista:{

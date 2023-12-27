@@ -3,9 +3,9 @@ import MapView, { Marker }  from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+import {firebase} from '../../services/firebaseConfig'
 
 
-import api from '../../services/api'
 
 import { Image,TouchableOpacity, ActivityIndicator,Text, View, StyleSheet } from 'react-native';
 import styles from './styles';
@@ -20,8 +20,20 @@ export default function Map(){
 
 
   async function loadMaly(){
-    const response= await api.get('maly');
-    setMaly(response.data)
+
+    const listMalyRef = firebase.firestore().collection('maly');
+
+    const querySnapshot = await listMalyRef
+    .where('tipoMaly', 'in', ['Banco', 'ATM'])
+    .where('estado', '==', "1")
+    .get();
+    const malys = [];
+
+    querySnapshot.forEach((doc) => {
+      malys.push({ id: doc.id, ...doc.data() });
+    });
+
+    setMaly(malys);
   }
 
   
@@ -100,6 +112,7 @@ export default function Map(){
           followsUserLocation={true}
         >
            {maly.map((item) => (
+            console.log('dados Mapa:',maly),
     <Marker
       key={item.id}
       coordinate={{
@@ -110,7 +123,7 @@ export default function Map(){
       description={item.nomePropretario}
     >
         <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
-          <Image style={{ width: 30, height: 30, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao }} />
+          <Image style={{ width: 30, height: 30, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
         </TouchableOpacity>    
         </Marker>
   ))}

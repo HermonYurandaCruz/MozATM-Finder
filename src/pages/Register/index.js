@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
+import {firebase} from '../../services/firebaseConfig'
 
 import styles from './styles';
-import api from '../../services/api'
 
 
 import logoGoogle from '../../../src/assets/google.png'
@@ -44,20 +44,26 @@ export default function Login(){
         setShowText(false);
         setErrorText(''); // Limpa qualquer mensagem de erro anterior
 
-          const response = await api.post('/user', {
-            nome,
-            sobreNome,
-            email,
-            senha,
-            
-          });
+        const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
+        const { user } = userCredential;
           // Aqui você pode tratar a resposta da API conforme necessário
-          console.log('Usuário criado:', response.data);
+    
+          await firebase.firestore().collection('users').doc(user.uid).set({
+            nome: nome,
+            sobreNome: sobreNome,
+            email: email,
+            // Adicione mais campos personalizados aqui, se necessário
+          });
+
           navigation.navigate('Login');
-          // Talvez redirecionar para outra tela ou mostrar uma mensagem de sucesso
+          
+
         } catch (error) {
-            console.error('Erro ao registrar usuário:', error);
-            setErrorText('Erro ao criar usuário. Por favor, tente novamente.'); // Define mensagem de erro
+            if (error.code === 'auth/email-already-in-use') {
+                setErrorText('Este e-mail já está em uso. Tente outro endereço de e-mail.');
+              } else {
+                setErrorText('Erro ao registrar usuário. Por favor, tente novamente.');
+              }
       
         } finally {
             setLoading(false);

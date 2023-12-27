@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 
-import api from '../../services/api'
+import {firebase} from '../../services/firebaseConfig'
 
 import { Image,TouchableOpacity, Text,ActivityIndicator,View,  } from 'react-native';
 import styles from './styles';
@@ -20,9 +20,22 @@ export default function MapaATM(){
 
 
   async function loadMaly(){
-    const response = await api.get(`/maly/searchMalyByTipo?tipo=${"Banco/ATM"}`);
-    setMaly(response.data)
+   
+    const listMalyRef = firebase.firestore().collection('maly');
+
+    const querySnapshot = await listMalyRef
+    .where('tipoMaly', 'in', ['Banco', 'ATM'])
+    .where('estado', '==', "1")
+    .get();
+    const malys = [];
+
+    querySnapshot.forEach((doc) => {
+      malys.push({ id: doc.id, ...doc.data() });
+    });
+
+    setMaly(malys);
   }
+
 
   
   const navigation = useNavigation();

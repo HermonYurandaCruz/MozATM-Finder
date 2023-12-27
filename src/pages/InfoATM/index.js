@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format } from 'date-fns';
 
 import api from '../../services/api'
+import {firebase} from '../../services/firebaseConfig'
 
 import bankInfra from '../../../src/assets/imagem.png';
 import perfilImg from '../../../src/assets/perfil.png'
@@ -19,16 +20,18 @@ export default function InfoATM(){
 
   const route = useRoute();
   const { itemId } = route.params;
-  const [data,setData]= useState([])
+  const [data,setData]= useState([]);
+  const [userData, setUserData] = useState(null);
   const [comentarios,setComentarios]= useState([]);
   const [dia, setDia] = useState('')
   const [textComentario, setTextComentario] = useState('')
   const [userName, setUserName] = useState('')
+  const [userId, setUserId] = useState('')
+
   const [idMaly, setIdMaly] = useState('')
 
   
-  const [showText, setShowText] = useState(true);
-  const [errorText, setErrorText] = useState('');
+
 
   
 
@@ -36,66 +39,93 @@ export default function InfoATM(){
 
   function getCurrentDate() {
     const currentDate = new Date();
-    return format(currentDate, 'dd/MM/yyyy HH:mm');
+    return format(currentDate, 'HH:mm dd/MM/yyyy');
   }
 
   const getMalyData = async (itemId) => {
     try {
-      const response = await api.get(`/maly/searchMalyById?id=${itemId}`);
-      setData(response.data)
+      
+      const malyRef = firebase.firestore().collection('maly').doc(itemId);
+      malyRef.get().then((doc) => {
+        if (doc.exists) {
+          setData(doc.data())
+
+          // Faça o que precisar com os dados do maly aqui
+        } else {
+          console.log('O maly não foi encontrado!');
+        }
+      }).catch((error) => {
+        console.error('Erro ao obter o maly:', error);
+      });
+
+
       setIdMaly(itemId)
-      return response.data; // Retorna os dados do usuário
     } catch (error) {
       console.error('Erro ao buscar usuário:', error);
       throw error;
     }
   };
 
-  const getUserData = async (userId) => {
+
+  const retrieveUserData = async () => {
     try {
-      const response = await api.get(`/user/searchUserById?id=${userId}`);
-      return response.data; // Retorna os dados do usuário
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData !== null) {
+        setUserData(JSON.parse(storedUserData));
+
+        setUserName(userData.nome);
+        setUserId(userData.id);
+        console.log('dados usuario:',userName)
+
+      }
     } catch (error) {
-      console.error('Erro ao buscar usuário:', error);
-      throw error;
+      console.error('Erro ao recuperar os dados do usuário:', error);
+      // Tratar erros ao recuperar dados do AsyncStorage
     }
   };
+
 
     const loadComentarios = async(itemId)=>{
-      const userId = await AsyncStorage.getItem('userId');
+      const malyRef = firebase.firestore().collection('comentarios');
+      const querySnapshot = await malyRef
+      .where('id_maly', '==', itemId)
+      .get();
 
-      const userData = await getUserData(userId);
-      setUserName(userData.nome);
-      const response = await api.get(`/comentarios/searchComentarioByIdMaly?id=${itemId}`);
-      setComentarios(response.data)
+      const comentario = [];
+
+      querySnapshot.forEach((doc) => {
+        comentario.push({ id: doc.id, ...doc.data() });
+      });
+
+      setComentarios(comentario)
   }
 
   const enviarComentario = async () => {
-    const userId = await AsyncStorage.getItem('userId');
+        setTextComentario("");
+        const diaTime = new Date();
+        const timestamp = firebase.firestore.Timestamp.fromDate(diaTime);
+   
+        if(!textComentario){
+      console.log('sem comentario')
+    }
     
-    console.log('Usuário criado:',idMaly,userId, userName,dia,textComentario);
 
 
     try{  
-      
-      const response = await api.post('/comentarios', {
-      
+      await firebase.firestore().collection('comentarios').add({
         id_maly: idMaly,
         id_user:userId,
         nomeUser:userName,
-        data:dia,
-        textComentario:textComentario      
-    });
-    
-    console.log('Usuário criado:', response.data);
+        data:timestamp,
+        diaText:dia,
+        textComentario:textComentario
+      })
 
-
-    }catch (error){
-      console.error('Erro ao registrar usuário:', error);
+      }catch (error){
+      console.error('Erro ao criar comentario:', error);
 
 
     }
-    setTextComentario("");
     loadComentarios(itemId);
 
   }
@@ -103,6 +133,7 @@ export default function InfoATM(){
   useEffect(() => {
     getMalyData(itemId);
     loadComentarios(itemId);
+    retrieveUserData();
     const today = getCurrentDate();
     setDia(today)
     
@@ -176,7 +207,7 @@ export default function InfoATM(){
               <View style={styles.caixaComentario}>
               <Text style={styles.conteudoComentario} >{comentarios.textComentario}</Text>
               </View>
-              <Text style={styles.Data}>{comentarios.data}</Text>
+              <Text style={styles.Data}>{comentarios.diaText}</Text>
             </View>
           </View>
           )}
