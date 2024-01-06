@@ -142,6 +142,12 @@ export default StyleSheet.create({
         marginTop:2
     },
 
+    img:{
+        width:42,
+        height: 42,
+        borderRadius: 100,
 
+        
+    },
 
 });

@@ -120,10 +120,10 @@ export default function Map(){
         longitude: item.longitude,
       }}
       title={item.nomeInstituicao}
-      description={item.nomePropretario}
+      description={item.tipoMaly}
     >
         <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
-          <Image style={{ width: 30, height: 30, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
+          <Image style={{ width: 22, height: 22, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
         </TouchableOpacity>    
         </Marker>
   ))}

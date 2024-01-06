@@ -10,7 +10,8 @@ export default StyleSheet.create({
     },
     heade:{
     flexDirection: "row",
-    alignItems:"center"
+    alignItems:"center",
+    marginBottom:16
     },
 
     Titulo:{

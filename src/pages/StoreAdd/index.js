@@ -1,70 +1,176 @@
 import React, {useEffect,useState} from "react";
-import {Image,View,ActivityIndicator,Text,TextInput,TouchableOpacity, FlatList} from 'react-native';
+import {Image,View,Modal,Text,TextInput,TouchableOpacity, FlatList} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation,route } from '@react-navigation/native';
 
 import styles from './styles';
-import { AntDesign,Feather, Ionicons,Entypo  } from '@expo/vector-icons';
-import api from '../../services/api'
+import { AntDesign,MaterialCommunityIcons, Ionicons,Entypo  } from '@expo/vector-icons';
 
-import bankInfra from '../../../src/assets/bankInfra.png'
-import UpdateBank from "../UpdateBank";
+import {firebase} from '../../services/firebaseConfig'
 
 
 
 export default function StoreAdd(){
   const navigation = useNavigation();
   const [instituicoes,setInstituicoes] = useState([])
-  const [estado, setEstado] = useState('')
+  const [showPopup, setShowPopup] = useState(false);
+  const [userId, setUserId] = useState('')
+  const [idMaly, setIdMaly] = useState('')
+
+  const [userData, setUserData] = useState(null);
+  const [selectedTab, setSelectedTab] = useState('Pendentes');
 
 
-  async function loadInstituicoes(){
-    const userId = await AsyncStorage.getItem('userId');
-    const response= await api.get(`/maly/searchMalyByIdUser?id=${userId}`);
-    setInstituicoes(response.data)
-  }
-  
 
-  const handleUpdate = (item) => {
-    navigation.navigate('UpdateBank', { itemId: item });
-  };
-  
+  const handleTabChange = async (tabName) => {
+    setSelectedTab(tabName);
 
-  const deleteMaly= async (idItem)=>{
-    const dataToUpdate = {
-      estado: "0",
-    };
-    
-    try {
-      const response = await api.put(`/maly/${idItem}`, dataToUpdate);
-      console.log('Resposta da atualização:', response.data);
-    } catch (error) {
-      console.error('Erro ao atualizar o recurso:', error);
+    if (tabName === 'Pendentes') {
+
+      const malyRef = firebase.firestore().collection('maly');
+
+      const querySnapshot = await malyRef
+      .where('idUser', '==', userId)
+      .where('estado', '==', '0')
+      .get();
+      const malys = [];
+      
+      querySnapshot.forEach((doc) => {
+        malys.push({ id: doc.id, ...doc.data() });
+      });
+      setInstituicoes(malys)
+      setUserId(userData.id)
+      
+    } else if (tabName === 'Aceites') {
+      const malyRef = firebase.firestore().collection('maly');
+
+      const querySnapshot = await malyRef
+      .where('idUser', '==', userId)
+      .where('estado', '==', '1')
+      .get();
+      const malys = [];
+      
+      querySnapshot.forEach((doc) => {
+        malys.push({ id: doc.id, ...doc.data() });
+      });
+      setInstituicoes(malys)
+      setUserId(userData.id)
     }
-    loadInstituicoes();
+
+
+  };
+
+  const retrieveUserData = async () => {
+    try {
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData !== null) {
+        setUserData(JSON.parse(storedUserData));
+        console.log('dados do usuario4',userData.id)
+
+      }
+    } catch (error) {
+      console.error('Erro ao recuperar os dados do usuário:', error);
+      // Tratar erros ao recuperar dados do AsyncStorage
+    }
+  };
+
+  async function loadMalyAddUser(){
+    const malyRef = firebase.firestore().collection('maly');
+
+    const querySnapshot = await malyRef
+    .where('idUser', '==', userId)
+    .where('estado', '==', '0')
+    .get();
+    const malys = [];
+    
+    querySnapshot.forEach((doc) => {
+      malys.push({ id: doc.id, ...doc.data() });
+    });
+    setInstituicoes(malys)
+    setUserId(userData.id)
+
   }
 
-  useEffect(()=>{
-    loadInstituicoes();
-  },[]);
+  async function loadMalyAddUserAceite(){
+    const malyRef = firebase.firestore().collection('maly');
+
+    const querySnapshot = await malyRef
+    .where('idUser', '==', userId)
+    .where('estado', '==', '1')
+    .get();
+    const malys = [];
+    
+    querySnapshot.forEach((doc) => {
+      malys.push({ id: doc.id, ...doc.data() });
+    });
+    setInstituicoes(malys)
+    setUserId(userData.id)
+
+  }
+
+
+ 
+  const handleDelete = async (docId) => {
+  
+    try {
+      await firebase.firestore().collection('maly').doc(docId).delete();
+      console.log('Documento excluído com sucesso!');
+      loadMalyAddUser()
+      setShowPopup(false);
+
+    } catch (error) {
+      console.error('Erro ao excluir o documento:', error);
+    }
+  };
+
+  const abrirPOP= async (id)=>{
+    setShowPopup(true);
+    setIdMaly(id)
+    console.log(' entrou no metodo ');
+  }
+  
+  
+
+
+  useEffect(() => {
+    retrieveUserData();
+  }, []);
+
+  useEffect(() => {
+    if (userData) {
+      setUserId(userData.id);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (userId) {
+      loadMalyAddUser();
+    }
+  }, [userId]);
+
+  
+
 
 
     return(
       <View style={styles.container}>
-        <Text style={styles.Text}>Instituicoes Bancarias</Text>
+        <View style={styles.heade}>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+                    <Text style={styles.Text}>Historico de contribuições</Text>
+                </View>
+    
+          <View style={styles.navStore}>
+            <TouchableOpacity onPress={() => handleTabChange('Pendentes')} style={[styles.tab, selectedTab === 'Pendentes' && styles.selectedTab]}>
+              <Text style={selectedTab === 'Pendentes' ? styles.selectedText : styles.tabText}>Pendentes</Text>
+            </TouchableOpacity>
 
-        <View style={styles.inputPesquisa}>
-            <Feather name="search" size={20} color="#19191B" />
-            <TextInput
-                  placeholder='Pesquisar Banco ou ATM'
-                  style={styles.input}
-                  />
+            <TouchableOpacity onPress={() => handleTabChange('Aceites')} style={[styles.tab, selectedTab === 'Aceites' && styles.selectedTab]}>
+              <Text style={selectedTab === 'Aceites' ? styles.selectedText : styles.tabText}>Aceites</Text>
+            </TouchableOpacity>
           </View>
+    
 
-
-          
-        
-          <FlatList 
+           <FlatList 
               data={instituicoes}
               showsVerticalScrollIndicator={false}
               keyExtractor={instituicao=> String(instituicao.id)} 
@@ -75,7 +181,7 @@ export default function StoreAdd(){
                     style={styles.imgBank}
                     source={{ uri:instituicao.foto_urlInstituicao }}
                   />
-
+                 
 
                     <View style={styles.infoBank}>
                       <Text style={styles.TextNomeBank}>{instituicao.nomeInstituicao}</Text>
@@ -89,19 +195,48 @@ export default function StoreAdd(){
                         <Ionicons name="time-outline" size={16} color="black" />
                         {instituicao.data}
                         </Text>
-                      </View>
+                  
+                       </View>
+
+                       <View style={styles.Hora}>
+                        <Text>Estado: </Text>
+                        <Text>{instituicao.estado == 0 ? 'Pendente' : 'Aceite'}</Text>
+              
+                       </View>
 
                         <View style={styles.buttonsCard}>
-
-                           <TouchableOpacity style={styles.buttonDireção} onPress={()=>deleteMaly(instituicao.id)} >
+                           <TouchableOpacity style={styles.buttonDireção} onPress={()=>abrirPOP(instituicao.id)} >
                               <AntDesign name="delete" size={18} color="#DD5757" />
-                          </TouchableOpacity>
-
-                          <TouchableOpacity style={styles.buttonDireção} onPress={() => handleUpdate(instituicao.id)} >
-                              <AntDesign name="edit" size={18} color="rgba(41, 82, 74, 0.68)" />
                           </TouchableOpacity>
                         </View>
 
+
+                      <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={showPopup}
+                      style={styles.modalContainer}
+                      presentationStyle="overFullScreen"
+                      onRequestClose={() => setShowPopup(false)}
+                       >
+                      <View style={styles.modalView}>
+                         <MaterialCommunityIcons name="delete-outline" size={42} color="#DD5757" />
+                          <Text style={styles.titlePopUp}>Apagar Arquivo</Text>
+                          <Text>Tem certeza de que deseja Apagar este Arquivo?</Text>
+
+                          <View style={styles.botoes}>
+                              <TouchableOpacity style={styles.sim} onPress={()=>handleDelete(idMaly)}>
+                                <Text style={styles.textButton}>Sim</Text>
+                              </TouchableOpacity>
+
+                              <TouchableOpacity style={styles.nao} onPress={() => setShowPopup(false)}>
+                                <Text >Não</Text>
+                              </TouchableOpacity>
+
+                          </View>
+                                              
+                        </View>
+                </Modal>  
                     </View>
 
                     

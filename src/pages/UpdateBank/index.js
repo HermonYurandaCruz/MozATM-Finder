@@ -19,6 +19,7 @@ export default function AddBank(){
 
     const navigation = useNavigation();
     const route = useRoute();
+    const { itemId } = route.params;
 
     
 
@@ -103,7 +104,9 @@ export default function AddBank(){
 
     function getCurrentDate() {
         const currentDate = new Date();
+        console.log('id do user:', itemId)
         return format(currentDate, 'dd/MM/yyyy');
+
       }
 
 

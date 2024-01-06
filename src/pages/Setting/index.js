@@ -1,8 +1,8 @@
 import React, { useState,useEffect } from 'react';
-import {View,Linking, Modal,TouchableOpacity,Text,Image} from 'react-native';
+import {View,Linking,ScrollView, Modal,TouchableOpacity,Text,Image} from 'react-native';
 import perfilImg from '../../../src/assets/perfil.png';
 import { AntDesign,Ionicons,MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
-import api from '../../services/api'
+import {firebase} from '../../services/firebaseConfig'
 import { useNavigation,useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -14,14 +14,68 @@ import { tr } from 'date-fns/locale';
 export default function Setting(){
   const navigation = useNavigation();
   const [showPopup, setShowPopup] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [userName, setUserName] = useState('')
+  const [imagemPerfil, setImagemPerfil] = useState('')
+
+  const [userApelido, setUserApelido] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userId, setUserId] = useState('')
+
+
   const email = 'hermondacruz73@gmail.com'; // E-mail pré-definido
   const body = ` `;
 
+  const retrieveUserData = async () => {
+    try {
+      const storedUserData = await AsyncStorage.getItem('userData');
+      if (storedUserData !== null) {
+        setUserData(JSON.parse(storedUserData));
+      }
+    } catch (error) {
+      console.error('Erro ao recuperar os dados do usuário:', error);
+      // Tratar erros ao recuperar dados do AsyncStorage
+    }
+  };
+
+
+  const carregarDadosAtuais = async () => {
+    try {
+      const userRef = firebase.firestore().collection('users').doc(userId);
+      const userDoc = await userRef.get();
+  
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserName(userData.nome || '');
+        setUserApelido(userData.sobreNome || '');
+        setUserEmail(userData.email || '');
+        setImagemPerfil(userData.fotoURL || perfilImg)
+      } else {
+        console.error('Usuário não encontrado.');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados do usuário:', error);
+    }
+  };
 
   const abrirPOP= async ()=>{
     setShowPopup(true);
     console.log(' entrou no metodo ');
 
+  }
+
+  const UpdateProfile=()=>{
+    console.log('id do usuario antes',userId)
+
+    navigation.navigate('UpdateProfile', { itemId: userId });
+    
+  }
+
+  const UpdatePassword=()=>{
+    console.log('id do usuario antes',userId)
+
+    navigation.navigate('UpdatePassword', { itemId: userId, emailUser:userEmail });
+    
   }
 
   const openStoreAdd = () => {
@@ -30,10 +84,9 @@ export default function Setting(){
 
   const handleLogout = async () => {
     try {
-      // Limpa o ID do usuário do AsyncStorage
-      await AsyncStorage.removeItem('userId');
-      // Redireciona o usuário de volta para a tela de login
+      await AsyncStorage.removeItem('userData');
       navigation.navigate('Login');
+      setShowPopup(false);
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
     }
@@ -45,34 +98,63 @@ export default function Setting(){
   }
 
 
+  const renderizarImagem = () => {
+    if (imagemPerfil) {
+      return <Image style={styles.img} source={{ uri: imagemPerfil }} />;
+    } else {
+      return <Image style={styles.img} source={perfilImg} />;
+    }
+  };
+
+  useEffect(() => {
+    retrieveUserData();
+  }, []);
+
+  useEffect(() => {
+    if (userData) {
+        setUserId(userData.id)
+    }
+  }, [userData]);
+  useEffect(()=>{
+    carregarDadosAtuais();
+    renderizarImagem();
+  })
+
+
+
     return(
       <View style={styles.container}>
+
           <View style={styles.heade}>
                     <Text style={styles.TextHeade}>Perfil</Text>
           </View>
           
-        
+         
+          <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
+        >
 
           <View style={styles.perfil}>
-            <Image style={styles.img} source={perfilImg}/>
-            <Text style={styles.textoNome}>Nome User</Text>
-            <Text style={styles.textoEmail}>e-mail</Text>
+          {renderizarImagem()}
+            <Text style={styles.textoNome}>{userName} {userApelido}</Text>
+            <Text style={styles.textoEmail}>{userEmail}</Text>
           </View>
 
           <Text style={styles.Titulo}>Perfil</Text>
            
             <View style={styles.box}>
                 
-                <View style={styles.botoes}>
+                <TouchableOpacity style={styles.botoes} onPress={UpdateProfile}>
                   <AntDesign name="edit" size={20} color="black" />
                   <Text style={styles.texto}>Editar Perfil</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.separator}></View>
 
-                <View style={styles.botoes}>
+                <TouchableOpacity style={styles.botoes} onPress={UpdatePassword}>
                   <MaterialCommunityIcons name="form-textbox-password" size={20} color="black" />
                   <Text style={styles.texto}>Mudar senha</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.separator}></View>
 
 
@@ -160,7 +242,7 @@ export default function Setting(){
 
             </View>
          
-
+            </ScrollView>
 
       </View>
     )

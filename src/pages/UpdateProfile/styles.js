@@ -10,7 +10,8 @@ export default StyleSheet.create({
     },
     heade:{
     flexDirection: "row",
-    alignItems:"center"
+    alignItems:"center",
+    marginBottom:16
     },
 
     Titulo:{
@@ -19,6 +20,13 @@ export default StyleSheet.create({
 
     },
 
+    ImgaEscolhida:{
+      width: 100, 
+      height: 100, 
+      borderRadius:100,
+      marginStart:"30%",
+      alignItems:"center"
+    },
     dadosNome: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -80,6 +88,11 @@ export default StyleSheet.create({
         marginTop:6,
         color:"#606060"
       },
+      img:{
+        width:72,
+        height: 72,
+        marginTop:24
+    },
 
       TextRecuperar:{
         textAlign:"right",

@@ -115,5 +115,58 @@ export default StyleSheet.create({
         marginTop:4,
         fontWeight:"600"
       },
+      modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        elevation: 5,
+        marginTop:"90%",
+        marginHorizontal:32,
+
+      },
+      titlePopUp: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom:4
+      },
+      sim:{
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginEnd:4,
+        marginTop:4,
+        backgroundColor:"rgba(99, 181, 71, 1)"
+      },
+      textButton:{
+        color:"#FFFFFF"
+     },
+     inputPopUp: {
+      marginTop:8,
+      borderBottomWidth: 2, // Define a largura da linha na parte inferior
+      borderBottomColor: '#254E46', // Define a cor da linha
+      marginBottom: 20,
+      paddingBottom: 12, // Espaçamento entre o texto e a linha
+      fontSize:16
+    },
+
+    botoes:{
+      flexDirection:"row",
+      alignItems:"center",
+      marginTop:4
+  },
+  nao:{
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop:4,
+    backgroundColor:"#DD5757"
+  },
 
 });

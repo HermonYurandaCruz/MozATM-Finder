@@ -9,7 +9,6 @@ export default StyleSheet.create({
         paddingTop:Constants.statusBarHeight +16 ,
     },
     Text:{
-        marginTop:24,
         fontSize:17,
         fontWeight:"700",
         color:"#19191B",
@@ -33,6 +32,28 @@ export default StyleSheet.create({
         color:"#19191B",
         marginStart:24
     },
+
+    navStore:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 10,
+        },
+
+    tab: {
+        paddingHorizontal: 18,
+        paddingVertical: 10,
+        borderRadius: 10,
+      },
+      selectedTab: {
+        backgroundColor: 'rgba(41, 82, 74, 0.85)', // Estilo quando selecionado
+      },
+      tabText: {
+        color: 'black',
+      },
+      selectedText: {
+        color: 'white',
+      },
+    
  
 
     TextMedio:{
@@ -75,6 +96,10 @@ export default StyleSheet.create({
         fontWeight:700,
         marginStart:2
     },
+    heade:{
+        flexDirection: "row",
+        alignItems:"center"
+        },
 
     buttonsCard:{
         flexDirection:"row",
@@ -101,7 +126,59 @@ export default StyleSheet.create({
     },
     buttonDireção:{
         marginEnd:8
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        elevation: 5,
+        marginTop:"90%",
+        marginHorizontal:32,
+
+      },
+      titlePopUp: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom:4
+      },
+      buttonPopUP:{
+        borderRadius: 8,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        backgroundColor: '#254E46',
+        marginTop:8
+      },
+      botoes:{
+        flexDirection:"row",
+        alignItems:"center",
+        marginTop:4
+    },
+      sim:{
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginEnd:4,
+        marginTop:4,
+        backgroundColor:"#DD5757"
+      },
+      nao:{
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginTop:4,
+        backgroundColor:"#F8F8F8"
+        
+      },
+      textButton:{
+         color:"#FFFFFF"
+      }
 
 
 });

@@ -82,6 +82,9 @@ export default function MapaATM(){
       });
     }
   };
+  const handleMarkerPress = (id) => {
+    navigation.navigate('InfoATM', { itemId: id });
+  };
 
   useEffect(() => {
     getLocation();
@@ -114,10 +117,12 @@ export default function MapaATM(){
         longitude: item.longitude,
       }}
       title={item.nomeInstituicao}
-      description={item.nomePropretario}
+      description={item.tipoMaly}
     >
-      <Image style={{ width: 30, height: 30, borderRadius:100 }} source={{ uri: item.foto_urlInstituicao }} />
-    </Marker>
+        <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
+          <Image style={{ width: 22, height: 22, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
+        </TouchableOpacity>    
+     </Marker>
   ))}
         </MapView>
       ) : (

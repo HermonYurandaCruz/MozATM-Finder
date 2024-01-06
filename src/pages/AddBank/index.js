@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import {View,ActivityIndicator,Button,TouchableOpacity , Modal, TextInput,Text} from 'react-native';
+import {View,ActivityIndicator,Button,TouchableOpacity , Image,Modal, TextInput,Text, ScrollView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons,AntDesign,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
 import { format } from 'date-fns';
@@ -8,6 +8,7 @@ import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles';
 import {firebase} from '../../services/firebaseConfig'
+import * as ImagePicker from 'expo-image-picker';
 
 
 
@@ -23,10 +24,13 @@ export default function AddBank(){
     const [isFocus, setIsFocus] = useState(false);
     const [isFocus2, setIsFocus2] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
+    const [imagemURI, setImagemURI] = useState(null);
 
   
-    const [estado, setEstado] = useState('1');
+    const [estado, setEstado] = useState('0');
     const [curtidas, setCurtidas] = useState('0');
+    const [numeroCancela, setNumeroCancela] = useState('0')
+
 
     const [userId, setUserId] = useState('')
 
@@ -40,7 +44,10 @@ export default function AddBank(){
     const [userName, setUserName] = useState('')
     const [foto_urlInstituicao, setfoto_urlInstituicao] = useState('')
     const [foto_urlMaly, setFoto_urlMaly] = useState('')
+    const [fotoURL,setFotoURL]= useState('')
 
+
+    
     const [tipoMaly, setTipoMaly] = useState('');
     const [tipoMalyName, setNameTipoMaly] = useState('');
 
@@ -127,6 +134,8 @@ export default function AddBank(){
         // Atualize as instituições baseadas no novo tipo selecionado
         loadInstituicoes();
       }
+
+
     
 
 
@@ -183,6 +192,10 @@ export default function AddBank(){
         setLoading(true);
         setShowText(false);
         setErrorText(''); // Limpa qualquer mensagem de erro anterior
+
+        if(fotoURL!=null){
+          setFoto_urlMaly(fotoURL)
+        }
         
 
         await firebase.firestore().collection('maly').add({
@@ -202,6 +215,7 @@ export default function AddBank(){
           data: data, 
           foto_urlInstituicao: foto_urlInstituicao,
           foto_urlMaly:foto_urlMaly,
+          numeroCancela:numeroCancela,
         });
           setShowPopup(true);
 
@@ -233,6 +247,59 @@ export default function AddBank(){
           console.error('Erro ao obter localização:', error);
         }
       };
+
+      const getPermissionAsync = async () => {
+        if (Platform.OS !== 'web') {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            alert('É necessário permitir acesso à galeria para selecionar uma foto.');
+            return false;
+          }
+          return true;
+        }
+        return false;
+      };
+
+
+      const selecionarFoto = async () => {
+        console.log('entrou na galeria')
+        const permissao = await getPermissionAsync();
+        if (!permissao) return;
+      
+        try {
+          const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+          });
+      
+      
+          const selectedImage = result.assets[0]; // Obter a primeira imagem selecionada, se houver
+      
+          if (selectedImage && selectedImage.uri) {
+
+            const numeroAleatorio = Math.floor(Math.random() * 1000000);
+            const idFoto = `${idInstituicao}_${numeroAleatorio}`;
+      
+        
+            if (selectedImage && selectedImage.uri) {
+              const response = await fetch(selectedImage.uri);
+              const blob = await response.blob();
+        
+              const storageRef = firebase.storage().ref().child(`fotos_maly/${idFoto}`);
+              await storageRef.put(blob);
+              const fotoURL = await storageRef.getDownloadURL();
+        
+              setImagemURI(selectedImage.uri);
+              setFotoURL(fotoURL);
+            }
+          }
+        } catch (error) {
+          console.error('Erro ao selecionar a foto:', error);
+        }
+      };
+      
     
 
       
@@ -251,8 +318,11 @@ export default function AddBank(){
                     <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
                     <Text style={styles.TextHeade}>Registrar</Text>
                 </View>
-         
-            <View style={styles.dadosNome}>
+         <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
+                   >
+         <View style={styles.dadosNome}>
         <Text style={styles.TituloATM} >Escolha o Estabelecimento</Text>
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'rgba(37, 78, 70, 1)' }]}
@@ -358,6 +428,18 @@ export default function AddBank(){
                                 value={codigoAgente}
                                 onChangeText={(text) => setCodigoAgente(text)}
                                 />
+                                  {imagemURI ? (
+                                  <Image source={{ uri: imagemURI }} style={{ width: 200, height: 200 }} />
+                                ) : (
+                                  
+                                  <TouchableOpacity onPress={selecionarFoto}>
+                                  <Ionicons name="images-outline" size={64} color="rgba(41, 82, 74, 0.85)" />
+                                  <Text>Adicionar uma foto da Banca</Text>
+
+                                </TouchableOpacity>
+                                )}
+
+
                                 </View>
                             )}  
 
@@ -390,6 +472,9 @@ export default function AddBank(){
             </TouchableOpacity>
             {errorText !== '' && <Text style={styles.errorText}>{errorText}</Text>}
 
+          
+         </ScrollView>
+       
           
 
                              

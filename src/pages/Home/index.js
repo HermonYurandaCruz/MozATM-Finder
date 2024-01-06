@@ -10,8 +10,6 @@ import {firebase} from '../../services/firebaseConfig'
 
 import imgATM from '../../../src/assets/ATM.png'
 import imgBank from '../../../src/assets/Bank.png'
-import gifMap from '../../../src/assets/giftListMap.gif'
-
 import perfilImg from '../../../src/assets/perfil.png'
 
 import { useNavigation,route } from '@react-navigation/native';
@@ -20,13 +18,36 @@ import { useNavigation,route } from '@react-navigation/native';
 export default function Home(){
 
   const navigation = useNavigation();
+  const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   const [userData, setUserData] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [imagemPerfil, setImagemPerfil] = useState('')
+  const [pesquisa, setPesquisa] = useState('');
+
+
 
   const [maly,setMaly]= useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingLista, setLoadingLista] = useState(true);
 
+
+  const carregarDadosAtuais = async () => {
+    try {
+      const userRef = firebase.firestore().collection('users').doc(userId);
+      const userDoc = await userRef.get();
+  
+      if (userDoc.exists) {
+        const userData = userDoc.data();
+        setUserName(userData.nome);
+        setImagemPerfil(userData.fotoURL);
+        } else {
+        console.error('Usuário não encontrado.');
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados do usuário:', error);
+    }
+  };
 
   const refreshList=async()=>{
     loadMalyProximos();
@@ -81,43 +102,59 @@ async function ordenarMalyPorProximidade(malys, userLatitude, userLongitude) {
 }
 
 // Função para carregar os MAly próximos com base na localização do usuário
-async function loadMalyProximos() {
-  try {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Permissão para acessar a localização negada');
-      return;
+  async function loadMalyProximos() {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permissão para acessar a localização negada');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      if (location) {
+        const { latitude, longitude } = location.coords;
+
+        const malyRef = firebase.firestore().collection('maly');
+
+        const querySnapshot = await malyRef
+        .where('tipoMaly', 'in', ['Banco', 'ATM'])
+        .where('estado', '==', "1")
+        .get();
+        const malys = [];
+        
+        querySnapshot.forEach((doc) => {
+          malys.push({ id: doc.id, ...doc.data() });
+        });
+
+        const malysProximos = await ordenarMalyPorProximidade(malys, latitude, longitude);
+
+        setMaly(malysProximos);
+        setLoadingLista(false);
+      }
+    } catch (error) {
+      console.error('Erro ao obter localização ou carregar MAly:', error);
     }
-
-    const location = await Location.getCurrentPositionAsync({});
-    if (location) {
-      const { latitude, longitude } = location.coords;
-
-      // Obter a referência para a coleção 'maly' no Firestore
-      const malyRef = firebase.firestore().collection('maly');
-
-      // Buscar os MAly do tipo "Banco/ATM"
-      const querySnapshot = await malyRef
-      .where('tipoMaly', 'in', ['Banco', 'ATM'])
-      .where('estado', '==', "1")
-      .get();
-      const malys = [];
-      
-      querySnapshot.forEach((doc) => {
-        malys.push({ id: doc.id, ...doc.data() });
-      });
-
-      // Ordenar os MAly por proximidade com base na localização do usuário
-      const malysProximos = await ordenarMalyPorProximidade(malys, latitude, longitude);
-
-      // Aqui você pode definir o estado com os MAly ordenados por proximidade
-      setMaly(malysProximos);
-      setLoadingLista(false);
-    }
-  } catch (error) {
-    console.error('Erro ao obter localização ou carregar MAly:', error);
   }
-}
+
+const searchFilter = (text) => {
+  const filtered = maly.filter((item) =>
+    item.nomeInstituicao.toLowerCase().includes(text.toLowerCase())
+  );
+  setPesquisa(text);
+  if (text === '') {
+    loadMalyProximos();
+  } else {
+    setMaly(filtered);
+  }
+  };
+
+const renderizarImagem = () => {
+  if (imagemPerfil) {
+    return <Image style={styles.img} source={{ uri: imagemPerfil }} />;
+  } else {
+    return <Image style={styles.img} source={perfilImg} />;
+  }
+};
 
 
   const handleInformacoes = (id) => {
@@ -140,12 +177,6 @@ async function loadMalyProximos() {
   const shareLocation =(lat,log, tipo)=>{
     const message = `Confira a localização do ${tipo} aqui: https://www.google.com/maps?q=${lat},${log}`;
     Linking.openURL(`sms:?body=${message}`);
-    
-    // Para compartilhar via WhatsApp
-    // Linking.openURL(`whatsapp://send?text=${message}`);
-   
-    // Para compartilhar via Facebook Messenger
-    // Linking.openURL(`fb-messenger://share?link=${message}`);
   }
   
 const openInMap=(lat,log)=>{
@@ -155,15 +186,66 @@ const openInMap=(lat,log)=>{
 
 
 
+useEffect(() => {
+  const loadMalyProximos = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permissão para acessar a localização negada');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      if (location) {
+        const { latitude, longitude } = location.coords;
+
+        const malyRef = firebase.firestore().collection('maly');
+
+        return malyRef
+          .where('tipoMaly', 'in', ['Banco', 'ATM'])
+          .where('estado', '==', '1')
+          .onSnapshot((querySnapshot) => {
+            const malys = [];
+            querySnapshot.forEach((doc) => {
+              malys.push({ id: doc.id, ...doc.data() });
+            });
+
+            const malysProximos = ordenarMalyPorProximidade(malys, latitude, longitude);
+            setMaly(malysProximos);
+            setLoadingLista(false);
+          });
+      }
+    } catch (error) {
+      console.error('Erro ao obter localização ou carregar Maly:', error);
+    }
+  };
+
+  const unsubscribe = loadMalyProximos();
+
+  return () => {
+    unsubscribe();
+  };
+}, []);
+
+
   useEffect(() => {
-    loadMalyProximos();
-    retrieveUserData();
-    
+    loadMalyProximos();  
     
   }, []);
 
+  useEffect(() => {
+    retrieveUserData();
+  }, []);
 
+  useEffect(() => {
+    if (userData) {
+        setUserId(userData.id)
+    }
+  }, [userData]);
+  useEffect(()=>{
+    carregarDadosAtuais();
 
+  })
   
 
 
@@ -171,17 +253,13 @@ const openInMap=(lat,log)=>{
         <View style={styles.container}>
 
           <View style={styles.header}>
-            <Image style={styles.logoImag} source={perfilImg}/>
+          {renderizarImagem()}
             <View>
               <Text style={styles.TextOla}>Bem-vindo de volta,</Text>
-              {userData && (
-                <>
-              <Text style={styles.UserName}>{userData.nome}</Text>
-              </>
-              )}
+              <Text style={styles.UserName}>{userName}</Text>
+
             </View>
            
-            <Ionicons style={styles.iconNotification} name="notifications-outline" size={24} color="black"  />
           </View>
 
           <View style={styles.inputPesquisa}>
@@ -189,6 +267,8 @@ const openInMap=(lat,log)=>{
             <TextInput
                   placeholder='Pesquisar Banco ou ATM'
                   style={styles.input}
+                  value={pesquisa}
+                  onChangeText={(text) => searchFilter(text)}
                   />
           </View>
 
@@ -299,7 +379,7 @@ const openInMap=(lat,log)=>{
           {loadingLista && (
 
              <View>
-                 <ActivityIndicator size="large"  color="#B0BEC5" style={styles.loadingLista} />
+                 <ActivityIndicator size="small"  color="#B0BEC5" style={styles.loadingLista} />
               
             </View>
 

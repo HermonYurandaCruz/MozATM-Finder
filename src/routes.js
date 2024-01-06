@@ -11,7 +11,13 @@ import MapaAgentes from './pages/MapaAgentes';
 import MapaATM from './pages/MapaATM';
 import Store from './pages/StoreAdd';
 import UpdateBank from './pages/UpdateBank';
-import TextFirebase from './pages/TextFirebase';
+import UpdateProfile from './pages/UpdateProfile';
+import Verificar from './services/api';
+import UpdatePassword from './pages/UpdatePassword';
+import MapInst from './pages/MapInst';
+import Setting from './pages/Setting';
+
+
 
 
 
@@ -23,17 +29,21 @@ export default function Routes(){
     return(
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{headerShown: false}}>
-                
+                <AppStack.Screen name='Verificar' component={Verificar}/>
+                <AppStack.Screen name='Register'component={Register}/>
                 <AppStack.Screen name='Login' component={Login}/>
                 <AppStack.Screen name='TabScreen' component={TabScreen}/>
                 <AppStack.Screen name='InfoATM' component={InfoATM}/>
                 <AppStack.Screen name='AddBank' component={AddBank}/>
-                <AppStack.Screen name='Register'component={Register}/>
                 <AppStack.Screen name='MapaAgentes'component={MapaAgentes}/>
                 <AppStack.Screen name='MapaATM'component={MapaATM}/>
                 <AppStack.Screen name='StoreAdd'component={Store}/>
                 <AppStack.Screen name='UpdateBank'component={UpdateBank}/>
-                <AppStack.Screen name='TextFirebase'component={TextFirebase}/>
+                <AppStack.Screen name='UpdateProfile'component={UpdateProfile}/>
+                <AppStack.Screen name='UpdatePassword'component={UpdatePassword}/>
+                <AppStack.Screen name='Setting'component={Setting}/>
+                <AppStack.Screen name='MapInst'component={MapInst}/>
+
 
             </AppStack.Navigator>
         </NavigationContainer>

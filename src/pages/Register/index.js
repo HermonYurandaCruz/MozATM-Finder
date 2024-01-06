@@ -25,6 +25,10 @@ export default function Login(){
     const [errorText, setErrorText] = useState('');
 
 
+    const handleLogin = () => {
+        navigation.replace('Login');
+      };
+
     const handleRegister = async () => {
 
         if (!nome || !sobreNome || !email || !senha || !confirmarSenha) {
@@ -74,22 +78,12 @@ export default function Login(){
 
   
 
- 
-
-   
-    const handleLoginPress = () => {
-        navigation.navigate('TabScreen');
-      };
-
-
-
     return(
         <View style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
-                    <Text style={styles.TextHeade}>Voltar</Text>
+                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={handleLogin} />
+                    <Text style={styles.Titulo}>Registrar uma conta</Text>
                 </View>
-                <Text style={styles.Titulo}>Registrar agora</Text>
 
          
                 <View style={styles.dadosNome}>

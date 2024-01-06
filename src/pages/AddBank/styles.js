@@ -15,6 +15,9 @@ export default StyleSheet.create({
         flexDirection:"row",
         alignItems:"center"
     },
+    scrollView:{
+      marginBottom:24
+    },
     TextHeade:{
         fontSize:18,
         fontWeight:"600"

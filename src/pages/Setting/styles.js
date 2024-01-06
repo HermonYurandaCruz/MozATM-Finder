@@ -16,10 +16,12 @@ export default StyleSheet.create({
     perfil:{
         alignItems:"center"
     },
+     scrollView:{
+    },
     box:{
         paddingVertical: 12,
         paddingHorizontal: 8,
-        backgroundColor:"rgba(41, 82, 74, 0.05)",
+        backgroundColor:"#FFFFFF",
         borderRadius:8,
     },
     botoes:{
@@ -58,9 +60,12 @@ export default StyleSheet.create({
 
     },
     img:{
-        width:72,
-        height: 72,
-        marginTop:24
+        width:92,
+        height: 92,
+        marginTop:24,
+        borderRadius: 100,
+
+        
     },
     TextHeade:{
         fontSize:18,

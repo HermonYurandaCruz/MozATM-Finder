@@ -36,18 +36,17 @@ export default StyleSheet.create({
         backgroundColor:"#FFFFFF",
         borderRadius:8,
         paddingVertical:6,
-        paddingHorizontal:4,
+        paddingHorizontal:16,
         marginTop:12
     },
     gosto:{
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"#FFF8E0",
-        paddingHorizontal:8,
+        paddingHorizontal:10,
         paddingVertical:4,
         borderRadius:6,
-        marginEnd:8,
-        marginStart:4,
+        marginEnd:10,
         marginTop:4,
         marginBottom:4,
     },
@@ -56,20 +55,20 @@ export default StyleSheet.create({
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"#E2FCFB",
-        paddingHorizontal:8,
+        paddingHorizontal:10,
         marginTop:4,
         marginBottom:4,
         borderRadius:6,
-        marginEnd:8,
+        marginEnd:10,
 
     },
     buttonDireção:{
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"rgba(0, 173, 181, 0.21)",
-        paddingHorizontal:8,
+        paddingHorizontal:10,
         borderRadius:6,
-        marginEnd:8,
+        marginEnd:10,
         marginTop:4,
         marginBottom:4,
 
@@ -77,8 +76,8 @@ export default StyleSheet.create({
     buttonMais:{
         flexDirection:"row",
         alignItems:"center",
-        backgroundColor:"rgba(0, 183, 40, 0.21)",
-        paddingHorizontal:8,
+        backgroundColor:"rgba(221, 87, 87, 0.4)",
+        paddingHorizontal:10,
         borderRadius:6,
         marginEnd:8,
         marginTop:4,
@@ -148,6 +147,65 @@ export default StyleSheet.create({
         padding:16,
         borderRadius:6,
 
-    }
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      },
+      modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        elevation: 5,
+        marginTop:"90%",
+        marginHorizontal:32,
+
+      },
+      titlePopUp: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom:4
+      },
+      buttonPopUP:{
+        borderRadius: 8,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        backgroundColor: '#254E46',
+        marginTop:8
+      },
+      sim:{
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginEnd:4,
+        marginTop:4,
+        backgroundColor:"rgba(99, 181, 71, 1)"
+      },
+      nao:{
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginTop:4,
+        backgroundColor:"#DD5757"
+      },
+      textButton:{
+         color:"#FFFFFF"
+      },
+      botoes:{
+        flexDirection:"row",
+        alignItems:"center",
+        marginTop:4
+    },
+
+    img:{
+        width:42,
+        height: 42,
+        borderRadius: 100,
+        
+    },
+
 
 });

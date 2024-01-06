@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'react-native';
-import { useNavigation,CommonActions  } from '@react-navigation/native';
+import React, {useState,useLayoutEffect} from 'react';
+import {View,ActivityIndicator,TouchableOpacity,Modal, Image, TextInput,Text} from 'react-native';
+import { useNavigation  } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AntDesign,Ionicons,MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
 
 import {firebase} from '../../services/firebaseConfig'
 
@@ -17,26 +18,18 @@ export default function Login(){
 
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-   
+    const [recuperaEmail, setRecuperaEmail] = useState('')
+
     const [loading, setLoading] = useState(false);
     const [showText, setShowText] = useState(true);
     const [errorText, setErrorText] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
 
 
-    const checkIfUserLoggedIn = async () => {
-      try {
-        const userId = await AsyncStorage.getItem('userId');
-        if (userId) {
-          // Se houver um ID de usuário salvo, navegue diretamente para a tela 'TabScreen'
-          navigation.navigate('TabScreen', { userId });
-        }
-      } catch (error) {
-        console.error('Erro ao verificar usuário logado:', error);
-      }
-    };
     
-    // Chame esta função no início do seu aplicativo
-    checkIfUserLoggedIn();
+
+
+
 
 
     const handleLoginPress = async () => {
@@ -55,9 +48,8 @@ export default function Login(){
           const userDoc = await firebase.firestore().collection('users').doc(userCredential.user.uid).get();
           if (userDoc.exists) {
             const userData = { id: userCredential.user.uid, ...userDoc.data() };
-            console.log('Dados do usuário:', userData);
             await AsyncStorage.setItem('userData', JSON.stringify(userData));
-            navigation.navigate('TabScreen');
+            navigation.replace('TabScreen');
           }
 
         return userCredential.user;
@@ -72,9 +64,43 @@ export default function Login(){
     };
     
       const handleRegisterPress = () => {
-        navigation.navigate('Register');
+        navigation.replace('Register');
       };
+
+
+      const handlePasswordReset = async () => {
+        if (!recuperaEmail) {
+          setErrorText('Por favor, insira seu endereço de e-mail.');
+          return;
+        }
       
+        try {
+          setLoading(true);
+          setErrorText(''); // Limpa qualquer mensagem de erro anterior
+      
+          await firebase.auth().sendPasswordResetEmail(recuperaEmail);
+          setShowPopup(false);
+
+          // Indique que o e-mail de redefinição foi enviado com sucesso
+          setErrorText('Um e-mail de redefinição de senha foi enviado para o seu endereço.');
+      
+        } catch (error) {
+          console.error('Erro ao enviar e-mail de redefinição de senha:', error);
+          setErrorText('Erro ao enviar e-mail de redefinição de senha. Por favor, tente novamente.');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+
+      const abrirPOP= async ()=>{
+        setShowPopup(true);
+        console.log(' entrou no metodo ');
+    
+      }
+      
+
+
     return(
         
         <View style={styles.container}>
@@ -107,7 +133,7 @@ export default function Login(){
                 />
 
                 
-                <Text style={styles.TextRecuperar}>Recuperar a senha</Text>
+                <Text style={styles.TextRecuperar} onPress={abrirPOP}>Recuperar a senha</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleLoginPress} disabled={loading}>
             {showText && <Text style={styles.text}>Login</Text>}
@@ -139,6 +165,49 @@ export default function Login(){
                 <Text style={styles.Text}>Não tem uma conta?</Text>
                 <Text style={styles.Text2} onPress={handleRegisterPress}>criar agora</Text>
                 </View>
+
+
+
+                <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={showPopup}
+                      style={styles.modalContainer}
+                      presentationStyle="overFullScreen"
+                      onRequestClose={() => setShowPopup(false)}
+                       >
+                      <View style={styles.modalView}>
+                          <MaterialIcons name="logout" size={42} color="rgba(41, 82, 74, 0.68)" />
+                          <Text style={styles.titlePopUp}>Esqueceu a senha?</Text>
+                          <Text>Por favor, insira seu endereço de e-mail.</Text>
+
+                          <TextInput
+                          style={styles.inputPopUp}
+                          placeholder='Digite o seu e-mail'
+                          value={recuperaEmail}
+                          onChangeText={(text) => setRecuperaEmail(text)}
+                          />
+
+                          {errorText !== '' && <Text style={styles.errorText}>{errorText}</Text>}
+
+
+                          <View style={styles.botoes}>
+                              <TouchableOpacity style={styles.sim} onPress={handlePasswordReset}>
+                                <Text style={styles.textButton}>Confirmar</Text>
+                              </TouchableOpacity>
+
+                              <TouchableOpacity style={styles.nao} onPress={() => setShowPopup(false)}>
+                                <Text style={styles.textButton}>Cancelar</Text>
+                              </TouchableOpacity>
+
+                          </View>
+                         
+
+                        
+                          
+                      
+                      </View>
+                </Modal>  
 
                         
 

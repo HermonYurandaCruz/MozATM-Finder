@@ -2,28 +2,30 @@ import React, { useEffect, useState } from "react";
 import MapView, { Marker }  from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Ionicons } from '@expo/vector-icons'; 
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation,useRoute } from '@react-navigation/native';
 
 
 import {firebase} from '../../services/firebaseConfig'
 
-import { Image,TouchableOpacity, Text,ActivityIndicator, View, StyleSheet } from 'react-native';
+import { Image,TouchableOpacity, Text,ActivityIndicator,View,  } from 'react-native';
 import styles from './styles';
 import gif from '../../../src/assets/giftMap.gif'
 
 
-export default function MapaAgentes(){
+export default function MapInst(){
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   const [maly,setMaly]= useState([])
-
+  const route = useRoute();
+  const { itemNome } = route.params;
 
   async function loadMaly(){
-    const malyRef = firebase.firestore().collection('maly');
+   console.log('nome InstMAp',itemNome)
+    const listMalyRef = firebase.firestore().collection('maly');
 
-    const querySnapshot = await malyRef
-    .where('tipoMaly', '==', 'Agente')
+    const querySnapshot = await listMalyRef
+    .where('nomeInstituicao', '==', itemNome)
     .where('estado', '==', "1")
     .get();
     const malys = [];
@@ -32,11 +34,13 @@ export default function MapaAgentes(){
       malys.push({ id: doc.id, ...doc.data() });
     });
 
-    setMaly(malys)
+    setMaly(malys);
   }
+
 
   
   const navigation = useNavigation();
+
 
   useEffect(() => {
     loadMaly();
@@ -79,14 +83,13 @@ export default function MapaAgentes(){
       });
     }
   };
+  const handleMarkerPress = (id) => {
+    navigation.navigate('InfoATM', { itemId: id });
+  };
 
   useEffect(() => {
     getLocation();
   }, []);
-  
-  const handleMarkerPress = (id) => {
-    navigation.navigate('InfoATM', { itemId: id });
-  };
 
   const mapRef = React.useRef(null);
 
@@ -119,25 +122,25 @@ export default function MapaAgentes(){
     >
         <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
           <Image style={{ width: 22, height: 22, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
-        </TouchableOpacity> 
-    </Marker>
+        </TouchableOpacity>    
+     </Marker>
   ))}
         </MapView>
       ) : (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         
         <Image style={{ width: 350, height: 350, borderRadius:100 }} source={gif}/>
         <Text style={styles.textEspera}>Aguardando a obtenção da localização...</Text>
         <ActivityIndicator size="large" color="#B0BEC5" />
-
-      </View>      
+      
+      </View>
       )}
 
        <TouchableOpacity style={styles.voltar} onPress={()=>navigation.goBack()}>  
         <Ionicons name="arrow-back-outline" size={24} color="black"  />
         </TouchableOpacity>
-
-
+        
+    
       
       <TouchableOpacity style={styles.button} onPress={getLocation}>
       <Ionicons name="locate-sharp" size={56} color="rgba(15, 82, 87, 1)" />

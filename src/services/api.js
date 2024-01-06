@@ -1,6 +1,31 @@
-import axios from 'axios';
+import React,{useEffect}from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation,  } from '@react-navigation/native';
 
-const api=axios.create({
-    baseURL:'http://172.20.10.3:3333'
-});
-export default api;
+
+export default function Verificar() {
+  const navigation = useNavigation();
+
+
+  const verificarUsuarioLogado = async () => {
+    try {
+      const userData = await AsyncStorage.getItem('userData');
+      if (userData) {
+        navigation.navigate('TabScreen')
+        console.log('com conta')
+
+      } else {
+        navigation.navigate('Login');
+        console.log('sem conta')
+      }
+    } catch (error) {
+      console.error('Erro ao verificar usuário logado:', error);
+      // Lide com o erro, por exemplo, mostrando uma mensagem ou logando-o para depuração
+    }
+  };
+
+
+  useEffect(() => {
+    verificarUsuarioLogado();
+  }, []);
+}
