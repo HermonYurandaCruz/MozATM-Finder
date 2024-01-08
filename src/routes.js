@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Platform } from 'react-native';
 
 import Login from './pages/Login'
 import InfoATM from './pages/InfoATM'
@@ -16,8 +17,9 @@ import Verificar from './services/api';
 import UpdatePassword from './pages/UpdatePassword';
 import MapInst from './pages/MapInst';
 import Setting from './pages/Setting';
-import Help from './pages/Help'
-import Admin from './pages/Admin'
+import Help from './pages/Help';
+import Admin from './pages/Admin';
+import ConfirmMaly from './pages/ConfirmMaly';
 
 
 
@@ -31,7 +33,9 @@ const AppStack = createNativeStackNavigator();
 export default function Routes(){
     return(
         <NavigationContainer>
-            <AppStack.Navigator screenOptions={{headerShown: false}}>
+            <AppStack.Navigator screenOptions={{headerShown: false,
+            gestureEnabled: Platform.OS === 'ios' ? false : true}}
+            >
                 <AppStack.Screen name='Verificar' component={Verificar}/>
                 <AppStack.Screen name='Register'component={Register}/>
                 <AppStack.Screen name='Login' component={Login}/>
@@ -48,6 +52,7 @@ export default function Routes(){
                 <AppStack.Screen name='MapInst'component={MapInst}/>
                 <AppStack.Screen name='Help' component={Help}/>
                 <AppStack.Screen name='Admin' component={Admin}/>
+                <AppStack.Screen name='ConfirmMaly' component={ConfirmMaly}/>
 
             </AppStack.Navigator>
         </NavigationContainer>

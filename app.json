@@ -14,8 +14,8 @@
       ]
     },
     
-    "name": "moz_atm_finder",
-    "slug": "moz_atm_finder",
+    "name": "MalyFinder",
+    "slug": "MalyFinder",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

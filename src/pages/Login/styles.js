@@ -23,7 +23,7 @@ export default StyleSheet.create({
 
     TextBold:{
         fontSize:24,
-        fontWeight:"700",
+        fontWeight:"800",
         color:"rgba(41, 82, 74, 0.9)"
     },
     TextBemVindo:{
@@ -136,7 +136,7 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         marginEnd:4,
         marginTop:4,
-        backgroundColor:"rgba(99, 181, 71, 1)"
+        backgroundColor:"rgba(41, 82, 74, 0.9)"
       },
       textButton:{
         color:"#FFFFFF"
@@ -160,7 +160,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginTop:4,
-    backgroundColor:"#DD5757"
+    backgroundColor:"#F8F8F8"
   },
 
 });

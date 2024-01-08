@@ -52,7 +52,8 @@ export default function Home(){
 
   const refreshList=async()=>{
     loadMalyProximos();
-    
+    setLoadingLista(true);
+
   }
   const retrieveUserData = async () => {
     try {

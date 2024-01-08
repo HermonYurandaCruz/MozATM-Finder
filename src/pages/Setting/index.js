@@ -88,6 +88,10 @@ export default function Setting(){
     navigation.navigate('Admin');
   };
 
+  const openAdminList= () => {
+    navigation.navigate('ConfirmMaly');
+  };
+
 
 const openURLServicos=async()=>{
   const url = 'https://malyspot.netlify.app/termos.html'; // TERMOS DE USO URL que deseja abrir
@@ -115,6 +119,7 @@ const openURLServicos=async()=>{
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userData');
+      // navigation.popToTop('Login');
       navigation.navigate('Login');
       setShowPopup(false);
     } catch (error) {
@@ -142,9 +147,17 @@ const openURLServicos=async()=>{
       <View>
         <View style={styles.separator}></View>
         <TouchableOpacity style={styles.botoes} onPress={openAdmin}>
-          <MaterialIcons name="logout" size={20} color="#000" />
+          <AntDesign name="addfile" size={20} color="#000" />    
           <Text style={styles.texto}>Adicionar Dados</Text>
         </TouchableOpacity>
+
+        <View style={styles.separator}></View>
+        <TouchableOpacity style={styles.botoes} onPress={openAdminList}>
+        <MaterialCommunityIcons name="list-status" size={20} color="#000" />
+          <Text style={styles.texto}>Lista Pendentes</Text>
+        </TouchableOpacity>
+        <View style={styles.separator}></View>
+
       </View>
     );
   }
@@ -241,12 +254,13 @@ const openURLServicos=async()=>{
 
             <Text style={styles.Titulo}>Conta</Text>
             <View style={styles.box}>
+            {renderizarComponentes()}
+
                 <TouchableOpacity style={styles.botoes} onPress={abrirPOP}>
                   <MaterialIcons name="logout" size={20} color="#F23232" />
                   <Text style={styles.textoSair}>Terminar sessão</Text>
                 </TouchableOpacity>
 
-                {renderizarComponentes()}
 
           
 

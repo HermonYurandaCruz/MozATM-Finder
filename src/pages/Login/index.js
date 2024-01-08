@@ -55,7 +55,10 @@ export default function Login(){
         if (userDoc.exists) {
           const userData = { id: userCredential.user.uid, ...userDoc.data() };
           await AsyncStorage.setItem('userData', JSON.stringify(userData));
-          navigation.replace('TabScreen');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'TabScreen' }],
+          });
         }
     
         return userCredential.user;
@@ -114,7 +117,7 @@ export default function Login(){
         
             <View style={styles.containerLogo}>
                 <Image style={styles.logoImag} source={logoImg}/>
-                <Text style={styles.TextBold}>MalySpot</Text>
+                <Text style={styles.TextBold}>MalyFinder</Text>
             </View>
          
             <View style={styles.formLogin}>
@@ -178,17 +181,14 @@ export default function Login(){
                           value={recuperaEmail}
                           onChangeText={(text) => setRecuperaEmail(text)}
                           />
-
-                          {errorText !== '' && <Text style={styles.errorText}>{errorText}</Text>}
-
-
+                          
                           <View style={styles.botoes}>
                               <TouchableOpacity style={styles.sim} onPress={handlePasswordReset}>
                                 <Text style={styles.textButton}>Confirmar</Text>
                               </TouchableOpacity>
 
                               <TouchableOpacity style={styles.nao} onPress={() => setShowPopup(false)}>
-                                <Text style={styles.textButton}>Cancelar</Text>
+                                <Text >Cancelar</Text>
                               </TouchableOpacity>
 
                           </View>
