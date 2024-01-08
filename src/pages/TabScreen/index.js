@@ -22,25 +22,25 @@ export default function TabScreen() {
 
         if (route.name === 'Home') {
           iconName = focused ? 'home' : 'home-outline';
-        } else if (route.name === 'ListBank') {
+        } else if (route.name === 'Instituições') {
           iconName = focused ? 'list' : 'list';
-        }else if (route.name === 'Map') {
+        }else if (route.name === 'Mapa') {
           iconName = focused ? 'map' : 'map-outline';
-        }else if (route.name === 'Perfil') {
-          iconName = focused ? 'person' : 'person-outline';
+        }else if (route.name === 'Definições') {
+          iconName = focused ? 'settings' : 'settings-outline';
         }
 
         return <Ionicons name={iconName} size={size} color={color} />;
       },
+      tabBarActiveTintColor: 'rgba(41, 82, 74, 0.9)',
     })}
-    tabBarOptions={{
-      activeTintColor: '#29524A',
-    }}
+    
+  
     >
       <Tab.Screen name="Home" component={Home}  options={{ headerShown: false }}  />
-      <Tab.Screen name="ListBank" component={ListBank}  options={{ headerShown: false }}  />
-      <Tab.Screen name="Map" component={Map}  options={{ headerShown: false }}  />
-      <Tab.Screen name="Perfil" component={Setting}  options={{ headerShown: false }}  />
+      <Tab.Screen name="Instituições" component={ListBank}  options={{ headerShown: false }}  />
+      <Tab.Screen name="Mapa" component={Map}  options={{ headerShown: false }}  />
+      <Tab.Screen name="Definições" component={Setting}  options={{ headerShown: false }}  />
 
     </Tab.Navigator>
   );

@@ -25,18 +25,20 @@ export default StyleSheet.create({
         width:"100%",
         height: "30%",
         borderRadius:8,
-        marginTop:16,
+        marginTop:22,
         marginBottom:8
     },
     UserNameAdd:{
-        flexDirection:"row"
+        flexDirection:"row",
+        alignItems:"center",
+        marginTop:2
     },
     dados:{
         flexDirection:"row",
         backgroundColor:"#FFFFFF",
         borderRadius:8,
         paddingVertical:6,
-        paddingHorizontal:16,
+        paddingHorizontal:7,
         marginTop:12
     },
     gosto:{
@@ -76,7 +78,7 @@ export default StyleSheet.create({
     buttonMais:{
         flexDirection:"row",
         alignItems:"center",
-        backgroundColor:"rgba(221, 87, 87, 0.4)",
+        backgroundColor:"rgba(56, 253, 182, 0.5)",
         paddingHorizontal:10,
         borderRadius:6,
         marginEnd:8,
@@ -86,13 +88,29 @@ export default StyleSheet.create({
     },
     Titulo:{
         fontSize:18,
-        fontWeight:"600"
+        fontWeight:"600",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     Text:{
-        fontSize:16,
+        fontSize:17,
         fontWeight:"600",
-        marginTop:8,
-        marginTop:16
+        marginTop:12,
+        color:"rgba(25, 25, 27, 0.9)"
+    },
+    textDados:{
+        fontSize:15,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.8)"
+    },
+    textBox:{
+        fontSize:14,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.8)"
+    },
+    textCodigoAgente:{
+        fontSize:15,
+        fontWeight:"700",
+        color:"rgba(37, 78, 70, 1)"
     },
     comentario:{
         flexDirection:"row",
@@ -105,8 +123,9 @@ export default StyleSheet.create({
         marginStart:6
     },
     NomeUser:{
-        fontSize:14,
-        fontWeight:"600"
+        fontSize:16,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     caixaComentario:{
         backgroundColor:"rgba(235, 235, 235, 1)",
@@ -117,16 +136,19 @@ export default StyleSheet.create({
     },
 
     conteudoComentario:{
-        fontSize:14,
+        fontSize:15,
         fontWeight:"400",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     Data:{
-        fontSize:12,
-        fontWeight:"400",
-        marginStart:8
+        fontSize:13,
+        fontWeight:"500",
+        marginStart:8,
+        color:"rgba(25, 25, 27, 0.5)"
+
     },
     escreverComentario:{
-        flexDirection: 'row',
+    flexDirection: 'row',
     justifyContent: 'space-between',
     position: 'absolute',
     bottom: 32,
@@ -135,18 +157,16 @@ export default StyleSheet.create({
     padding: 16, 
     },
     input:{
-        padding: 12, // Adicione o padding desejado para o conteúdo na parte inferior
+        padding: 16, // Adicione o padding desejado para o conteúdo na parte inferior
         backgroundColor:"#FFFFFF",
-        width:"80%",
-        borderRadius:8
+        width:"86%",
+        borderRadius:8,
+        minHeight: 42,
+        fontSize:16
+        
     },
     Enviar:{
-        flexDirection:"row",
-        alignItems:"center",
-        backgroundColor:"#FFFFFF",
-        padding:16,
-        borderRadius:6,
-
+   
     },
     modalContainer: {
         flex: 1,

@@ -91,22 +91,11 @@ export default function StoreAdd(){
 
   }
 
-  async function loadMalyAddUserAceite(){
-    const malyRef = firebase.firestore().collection('maly');
+  
+  const handleInformacoes = (id) => {
+    navigation.navigate('InfoATM', { itemId: id });
+  };
 
-    const querySnapshot = await malyRef
-    .where('idUser', '==', userId)
-    .where('estado', '==', '1')
-    .get();
-    const malys = [];
-    
-    querySnapshot.forEach((doc) => {
-      malys.push({ id: doc.id, ...doc.data() });
-    });
-    setInstituicoes(malys)
-    setUserId(userData.id)
-
-  }
 
 
  
@@ -155,7 +144,7 @@ export default function StoreAdd(){
     return(
       <View style={styles.container}>
         <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
                     <Text style={styles.Text}>Historico de contribuições</Text>
                 </View>
     
@@ -176,7 +165,7 @@ export default function StoreAdd(){
               keyExtractor={instituicao=> String(instituicao.id)} 
               renderItem={({item:instituicao})=>(
               
-              <View  style={styles.CardBank} >
+              <TouchableOpacity  style={styles.CardBank} onPress={() => handleInformacoes(instituicao.id)} >
                    <Image
                     style={styles.imgBank}
                     source={{ uri:instituicao.foto_urlInstituicao }}
@@ -187,20 +176,20 @@ export default function StoreAdd(){
                       <Text style={styles.TextNomeBank}>{instituicao.nomeInstituicao}</Text>
 
                       <Text style={styles.TextAndereco}> 
-                      <Ionicons name="md-location-outline" size={16} color="black" />
+                      <Ionicons name="md-location-outline" size={16} color="rgba(25, 25, 27, 0.9)" />
                       {instituicao.endereco}</Text>
 
                       <View style={styles.Hora}>
-                        <Text>
-                        <Ionicons name="time-outline" size={16} color="black" />
-                        {instituicao.data}
+                        <Text style={styles.TextTypoBank}>
+                        <Ionicons name="time-outline" size={16} color="rgba(25, 25, 27, 0.9)" />
+                         {instituicao.data}
                         </Text>
                   
                        </View>
 
                        <View style={styles.Hora}>
-                        <Text>Estado: </Text>
-                        <Text>{instituicao.estado == 0 ? 'Pendente' : 'Aceite'}</Text>
+                       <MaterialCommunityIcons name="list-status" size={16} color="rgba(25, 25, 27, 0.9)" />
+                       <Text> {instituicao.estado == 0 ? 'Pendente' : 'Aceite'}</Text>
               
                        </View>
 
@@ -241,7 +230,7 @@ export default function StoreAdd(){
 
                     
 
-              </View>
+              </TouchableOpacity>
 
 
             )}

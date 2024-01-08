@@ -1,6 +1,8 @@
 import React, { useState,useEffect } from 'react';
 import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'react-native';
 import { useNavigation,useRoute } from '@react-navigation/native';
+import * as ImageManipulator from 'expo-image-manipulator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Ionicons,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -24,6 +26,7 @@ export default function UpdateProfile(){
     const [sobreNome, setSobreNome] = useState('')
     const [fotoURL,setFotoURL]= useState('')
     const [imagemURI, setImagemURI] = useState(null);
+    
 
    
     const [loading, setLoading] = useState(false);
@@ -47,6 +50,19 @@ export default function UpdateProfile(){
           console.error('Erro ao carregar dados do usuário:', error);
         }
       };
+
+      const AsyncStorageUpdate= async (nome,sobreNome,fotoURL)=>{
+        const currentData = await AsyncStorage.getItem('userData');
+        const userData = JSON.parse(currentData);
+
+                // Modificar apenas os campos necessários
+        userData.nome = nome;
+        userData.sobreNome = sobreNome;
+        userData.fotoURL = fotoURL;
+
+        await AsyncStorage.setItem('userData', JSON.stringify(userData));
+
+      }
       
 
 
@@ -65,15 +81,20 @@ export default function UpdateProfile(){
         setErrorText(''); // Limpa qualquer mensagem de erro anterior
 
         const userRef = firebase.firestore().collection('users').doc(itemId);
-          // Aqui você pode tratar a resposta da API conforme necessário
-    
-          await userRef.update({
-            nome: nome,
-            sobreNome: sobreNome,
-            fotoURL: fotoURL,
-          });
-
-navigation.goBack()          
+          if(fotoURL){
+            await userRef.update({
+              nome: nome,
+              sobreNome: sobreNome,
+              fotoURL: fotoURL,
+            });
+          }else{
+            await userRef.update({
+              nome: nome,
+              sobreNome: sobreNome,
+            });
+          }
+       
+          navigation.goBack()          
 
         } catch (error) {
             if (error.code === 'auth/email-already-in-use') {
@@ -116,25 +137,27 @@ const selecionarFoto = async () => {
       quality: 1,
     });
 
-
     const selectedImage = result.assets[0]; // Obter a primeira imagem selecionada, se houver
 
     if (selectedImage && selectedImage.uri) {
+      const manipResult = await ImageManipulator.manipulateAsync(
+        selectedImage.uri,
+        [{ resize: { width: 800, height: 800 } }], // Redimensionar para 800x800 (ajuste conforme necessário)
+        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compressão de 70% em formato JPEG
+      );
+
+      const response = await fetch(manipResult.uri);
+      const blob = await response.blob();
+
       const numeroAleatorio = Math.floor(Math.random() * 1000000);
       const idFoto = `${itemId}_${numeroAleatorio}`;
 
-  
-      if (selectedImage && selectedImage.uri) {
-        const response = await fetch(selectedImage.uri);
-        const blob = await response.blob();
-  
-        const storageRef = firebase.storage().ref().child(`fotos_perfil/${idFoto}`);
-        await storageRef.put(blob);
-        const fotoURL = await storageRef.getDownloadURL();
-  
-        setImagemURI(selectedImage.uri);
-        setFotoURL(fotoURL);
-      }
+      const storageRef = firebase.storage().ref().child(`fotos_perfil/${idFoto}`);
+      await storageRef.put(blob);
+      const fotoURL = await storageRef.getDownloadURL();
+
+      setImagemURI(manipResult.uri);
+      setFotoURL(fotoURL);
     }
   } catch (error) {
     console.error('Erro ao selecionar a foto:', error);
@@ -159,7 +182,7 @@ const selecionarFoto = async () => {
     return(
         <View style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
                     <Text style={styles.Titulo}>Editar Perfil</Text>
                 </View>
  
@@ -167,7 +190,7 @@ const selecionarFoto = async () => {
                   <Image style={styles.ImgaEscolhida} source={{ uri: imagemURI }}  />
                 ) : (
                   <TouchableOpacity onPress={selecionarFoto}>
-                  <Ionicons style={styles.ImgaEscolhida} name="person-circle-outline" size={100} color="black" /> 
+                  <Ionicons style={styles.ImgaEscolhida} name="person-circle-outline" size={100} color="rgba(41, 82, 74, 0.9)" /> 
                  </TouchableOpacity>
                 )}
                 <Text style={styles.Text}>Atualizar Nome</Text>

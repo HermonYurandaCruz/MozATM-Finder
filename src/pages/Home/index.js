@@ -21,7 +21,6 @@ export default function Home(){
   const [userId, setUserId] = useState('');
   const [userName, setUserName] = useState('');
   const [userData, setUserData] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [imagemPerfil, setImagemPerfil] = useState('')
   const [pesquisa, setPesquisa] = useState('');
 
@@ -32,22 +31,24 @@ export default function Home(){
   const [loadingLista, setLoadingLista] = useState(true);
 
 
-  const carregarDadosAtuais = async () => {
-    try {
-      const userRef = firebase.firestore().collection('users').doc(userId);
-      const userDoc = await userRef.get();
-  
+  console.log('id do usuario antes',userId)
+
+  const carregarDadosAtuais = (userId) => {
+    const userRef = firebase.firestore().collection('users').doc(userId);
+    userRef.onSnapshot((userDoc) => {
       if (userDoc.exists) {
         const userData = userDoc.data();
-        setUserName(userData.nome);
-        setImagemPerfil(userData.fotoURL);
-        } else {
+        setUserName(userData.nome || '');
+  
+        setImagemPerfil(userData.fotoURL || perfilImg)
+      } else {
+        setUserName('');
+        setImagemPerfil(perfilImg);
         console.error('Usuário não encontrado.');
       }
-    } catch (error) {
-      console.error('Erro ao carregar dados do usuário:', error);
-    }
+    });
   };
+
 
   const refreshList=async()=>{
     loadMalyProximos();
@@ -103,6 +104,7 @@ async function ordenarMalyPorProximidade(malys, userLatitude, userLongitude) {
 
 // Função para carregar os MAly próximos com base na localização do usuário
   async function loadMalyProximos() {
+
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -187,6 +189,8 @@ const openInMap=(lat,log)=>{
 
 
 useEffect(() => {
+  let unsubscribe;
+
   const loadMalyProximos = async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -201,7 +205,7 @@ useEffect(() => {
 
         const malyRef = firebase.firestore().collection('maly');
 
-        return malyRef
+        unsubscribe = malyRef
           .where('tipoMaly', 'in', ['Banco', 'ATM'])
           .where('estado', '==', '1')
           .onSnapshot((querySnapshot) => {
@@ -220,17 +224,19 @@ useEffect(() => {
     }
   };
 
-  const unsubscribe = loadMalyProximos();
+  loadMalyProximos();
 
   return () => {
-    unsubscribe();
+    if (unsubscribe) {
+      unsubscribe(); // Cancela a inscrição no snapshot
+    }
   };
 }, []);
 
 
+
   useEffect(() => {
-    loadMalyProximos();  
-    
+    loadMalyProximos(); 
   }, []);
 
   useEffect(() => {
@@ -240,12 +246,12 @@ useEffect(() => {
   useEffect(() => {
     if (userData) {
         setUserId(userData.id)
+        carregarDadosAtuais(userData.id);
     }
-  }, [userData]);
-  useEffect(()=>{
-    carregarDadosAtuais();
 
-  })
+
+  }, [userData]);
+
   
 
 
@@ -272,7 +278,7 @@ useEffect(() => {
                   />
           </View>
 
-          <Text style={styles.Text}>Busca por Bancos/ATMs e Agentes</Text>
+          <Text style={styles.Text}>Busca rápida</Text>
           <View style={styles.containerATM}>
             <View>
             <TouchableOpacity style={styles.buttonATM} onPress={openMapATM}>
@@ -324,19 +330,18 @@ useEffect(() => {
 
               <View style={styles.infoBank}>
                 <Text style={styles.TextNomeBank}>{maly.nomeInstituicao}</Text>
-                <Text style={styles.TextTypoBank}> {maly.tipoMaly}</Text>
+                <Text style={styles.TextTypoBank}>
+                <MaterialCommunityIcons name="bank-outline" size={18} color="black" />
+                {maly.tipoMaly}</Text>
 
                 <Text style={styles.TextAndereco}> 
-                <Ionicons name="md-location-outline" size={16} color="black" />
+                <Ionicons name="md-location-outline" size={18} color="black" />
                 {maly.endereco}</Text>
 
                 <View style={styles.Hora}>
                   <Text>
-                  <Ionicons name="time-outline" size={16} color="black" />
-                  Aberto : 
-                  </Text>
-                  <Text>
-                  08:00–15:00
+                  <Ionicons name="time-outline" size={18} color="black" />
+                   08:00–15:00
                   </Text>
                 </View>
                         
@@ -345,7 +350,7 @@ useEffect(() => {
 
                     <TouchableOpacity style={styles.buttonDireção} onPress={() => openInMap(maly.latitude,maly.longitude)}>
                         <View style={styles.buttonContentCard}>
-                            <MaterialCommunityIcons name="directions" size={15} color="rgba(25, 25, 27, 1)" />
+                            <MaterialCommunityIcons name="directions" size={16} color="rgba(25, 25, 27, 1)" />
                             <Text style={styles.textButton}>Direção</Text>
                         </View>
                     </TouchableOpacity>

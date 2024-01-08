@@ -17,14 +17,14 @@ export default StyleSheet.create({
     },
 
     containerRecuperar:{
-        marginTop:32,
+        marginTop:14,
         flexDirection:"row",
     },
 
     TextBold:{
-        fontSize:26,
+        fontSize:24,
         fontWeight:"700",
-        color:"#19191B"
+        color:"rgba(41, 82, 74, 0.9)"
     },
     TextBemVindo:{
         fontSize:18,
@@ -33,46 +33,47 @@ export default StyleSheet.create({
     },
     TextForm:{
         fontSize:16,
-        fontWeight:"400",
+        fontWeight:"500",
         marginTop:32,
-        color:"#606060"
+        color:"rgba(25, 25, 27, 0.9)"
       },
     input: {
         marginTop:12,
         borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: '#254E46', // Define a cor da linha
+        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
         marginBottom: 20,
         paddingBottom: 12, // Espaçamento entre o texto e a linha
         fontSize:16
       },
+      
       Text:{
         fontSize:16,
-        fontWeight:"400",
+        fontWeight:"500",
         marginTop:6,
-        color:"#606060"
+        color:"rgba(25, 25, 27, 0.9)"
       },
 
       TextRecuperar:{
         textAlign:"right",
-        fontSize:16,
-        fontWeight:"400",
-        marginTop:4,
-        color:"#606060",
+        fontSize:15,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.6)",
         marginBottom:8
       },
+      Textm:{
+        fontSize:15,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.8)",
+      },
+
       button: {
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: '#254E46',
+        backgroundColor: 'rgba(41, 82, 74, 0.9)',
       },
 
-      buttonGoogle:{
-        borderRadius: 8,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
-        backgroundColor: 'rgba(41, 82, 74, 0.15)',
-      },
+    
       buttonContent: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -83,19 +84,12 @@ export default StyleSheet.create({
         fontWeight:"bold",
 
       },
-      textGoogle:{
-        color: '#254E46',
-        textAlign: 'center',
-        marginLeft: 35, 
-        fontWeight:"bold",
-      },
+  
       Text2:{
-        fontSize:16,
-        fontWeight:"400",
-        marginTop:6,
-        color:"#0F5257", 
+        fontSize:15,
+        fontWeight:"700",
         marginStart:4,
-        fontWeight:"500"
+        color:"rgba(41, 82, 74, 0.9)",    
       },
       Text3:{
         fontSize:16,

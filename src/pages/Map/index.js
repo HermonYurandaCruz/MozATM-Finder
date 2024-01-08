@@ -136,11 +136,11 @@ export default function Map(){
         </View>  
         )}
       <TouchableOpacity style={styles.buttonAdd} onPress={addBank}>
-      <Ionicons name="md-add-circle-outline" size={56} color="rgba(15, 82, 87, 1)" />    
+      <Ionicons name="md-add-circle-outline" size={56} color="rgba(41, 82, 74, 0.9)" />    
       </TouchableOpacity>
       
       <TouchableOpacity style={styles.button} onPress={getLocation}>
-      <Ionicons name="locate-sharp" size={56} color="rgba(15, 82, 87, 1)" />
+      <Ionicons name="locate-sharp" size={56} color="rgba(41, 82, 74, 0.9)" />
       </TouchableOpacity>
     </View>
   );

@@ -16,6 +16,9 @@ import Verificar from './services/api';
 import UpdatePassword from './pages/UpdatePassword';
 import MapInst from './pages/MapInst';
 import Setting from './pages/Setting';
+import Help from './pages/Help'
+import Admin from './pages/Admin'
+
 
 
 
@@ -43,7 +46,8 @@ export default function Routes(){
                 <AppStack.Screen name='UpdatePassword'component={UpdatePassword}/>
                 <AppStack.Screen name='Setting'component={Setting}/>
                 <AppStack.Screen name='MapInst'component={MapInst}/>
-
+                <AppStack.Screen name='Help' component={Help}/>
+                <AppStack.Screen name='Admin' component={Admin}/>
 
             </AppStack.Navigator>
         </NavigationContainer>

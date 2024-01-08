@@ -18,15 +18,15 @@ export default StyleSheet.create({
     right: 0
     },
     TextOla:{
-        fontSize:14,
-        fontWeight:"400",
-        color:"rgba(147, 147, 147, 1)",
-        marginStart:6
+        fontSize:15,
+        fontWeight:"500",
+        marginStart:6,
+        color:"rgba(25, 25, 27, 0.7)"
         },
     UserName:{
         fontSize:18,
-        fontWeight:"500",
-        color:"#19191B",
+        fontWeight:"600",
+        color:"#254E46",
         marginStart:6
     },
 
@@ -44,15 +44,15 @@ export default StyleSheet.create({
         marginStart:24
     },
     Text:{
-        marginTop:24,
-        fontSize:17,
-        fontWeight:"500",
-        color:"#19191B",
+        marginTop:18,
+        fontSize:18,
+        fontWeight:"600",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     containerATM:{
         flexDirection:"row",
         justifyContent:"space-between",
-        marginTop:16
+        marginTop:8
     },
     buttonContent:{
         borderRadius:8,
@@ -63,20 +63,20 @@ export default StyleSheet.create({
     TextMedio:{
         textAlign:"center",
         fontSize:14,
-        fontWeight:"400",
-        marginTop:4
+        fontWeight:"500",
+        marginTop:4,
+        color:"rgba(25, 25, 27, 0.7)"
     },
     TextLista:{
-        fontSize:17,
-        fontWeight:"500",
-        color:"#19191B",
+        fontSize:18,
+        fontWeight:"600",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     estiloRefre:{
-        marginTop:16,
+        marginTop:18,
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"space-between"
-        
     },
     
     loadingLista:{
@@ -92,14 +92,16 @@ export default StyleSheet.create({
         flexDirection:"row",
         backgroundColor:"#FFFFFF",
         borderRadius:8,
-        paddingVertical:12,
-        paddingHorizontal:12,
+        paddingVertical:8,
+        paddingHorizontal:8,
         marginTop:8
     },
   
     Hora:{
         flexDirection:"row",
-        alignItems:"center"
+        alignItems:"center", 
+        fontSize:15,
+        fontWeight:"400",
     },
 
     buttonsCard:{
@@ -118,16 +120,20 @@ export default StyleSheet.create({
         marginTop:4
     },
     imgBank:{
-        marginTop:12,
-        width: 64,
-        height: 64,
+        marginTop:18,
+        width: 68,
+        height: 68,
         borderRadius:8
     },
-    
+    textButton:{
+        fontSize:13,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.9)"
+    },
     TextNomeBank:{
-        fontSize:15,
-        fontWeight:"600",
-
+        fontSize:16,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.9)"
     },
         loadingIndicator:{
         position:"absolute",
@@ -135,11 +141,13 @@ export default StyleSheet.create({
         paddingStart:"80%"
     },
     TextTypoBank:{
-        fontSize:14,
+        fontSize:15,
         fontWeight:"400",
     },
     TextAndereco:{
-        marginTop:2
+        marginTop:2,
+        fontSize:15,
+        fontWeight:"400",
     },
 
     img:{

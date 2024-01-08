@@ -9,11 +9,10 @@ export default StyleSheet.create({
         paddingTop:Constants.statusBarHeight +16 ,
     },
     Text:{
-        marginTop:24,
-        fontSize:17,
-        fontWeight:"700",
-        color:"#19191B",
-    },
+        fontSize:18,
+        fontWeight:"600",
+        color:"rgba(25, 25, 27, 0.9)"
+        },
     loadingIndicator:{
         position:"absolute",
         paddingTop:"100%",
@@ -21,7 +20,7 @@ export default StyleSheet.create({
     },
 
     inputPesquisa:{
-        marginTop:16,
+        marginTop:22,
         flexDirection:"row",
         borderRadius: 8,
         paddingVertical: 8,
@@ -71,9 +70,10 @@ export default StyleSheet.create({
         marginTop:4,
     },
     curtidasText:{
-        fontSize:14,
-        fontWeight:700,
-        marginStart:2
+        fontSize:15,
+        fontWeight:300,
+        marginStart:2,
+        color:"rgba(25, 25, 27, 0.7)"
     },
 
     buttonsCard:{
@@ -89,8 +89,8 @@ export default StyleSheet.create({
     },
     
     TextNomeBank:{
-        fontSize:15,
-        fontWeight:"600",
+        fontSize:16,
+        fontWeight:"500",
     },
     TextTypoBank:{
         fontSize:14,

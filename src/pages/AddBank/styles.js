@@ -13,26 +13,27 @@ export default StyleSheet.create({
     },
     heade:{
         flexDirection:"row",
-        alignItems:"center"
+        alignItems:"center",
     },
     scrollView:{
       marginBottom:24
     },
     TextHeade:{
         fontSize:18,
-        fontWeight:"600"
+        fontWeight:"600",
+        color:"rgba(25, 25, 27, 0.9)",
     },
     Titulo:{
-        fontSize:18,
-        fontWeight:"500",
-        marginTop:8,
-        marginTop:16
+      fontSize:16,
+      fontWeight:"500",
+      marginTop:8,
+      color:"rgba(25, 25, 27, 0.9)"
     },
     TituloATM:{
         fontSize:16,
         fontWeight:"500",
-        marginTop:8,
-        marginTop:24
+        marginTop:22,
+        color:"rgba(25, 25, 27, 0.9)"
     },
     camera:{
         alignItems:"center",
@@ -60,7 +61,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: '#254E46',
+        backgroundColor: 'rgba(41, 82, 74, 0.9)',
         marginTop:18
       },
       text: {
@@ -81,7 +82,7 @@ export default StyleSheet.create({
       input: {
         marginTop:12,
         borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: '#254E46', // Define a cor da linha
+        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
         marginBottom: 20,
         paddingBottom: 12, // Espaçamento entre o texto e a linha
         fontSize:16
@@ -140,5 +141,22 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: '#254E46',
         marginTop:8
+      },
+      checkView:{
+        flexDirection:"row",
+        alignItems:"center",
+        marginTop:16
+      },
+      Text:{
+        fontSize:15,
+        fontWeight:"300",
+        marginStart:4
+
+      },
+      TextLer:{
+        fontSize:15,
+        marginStart:2,
+        color:"#0F5257",
+        fontWeight:"700"
       }
 });

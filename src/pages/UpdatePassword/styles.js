@@ -17,7 +17,7 @@ export default StyleSheet.create({
     Titulo:{
         fontSize:18,
         fontWeight:"600",
-
+        color:"rgba(25, 25, 27, 0.9)"
     },
 
     dadosNome: {
@@ -68,7 +68,7 @@ export default StyleSheet.create({
     input: {
         marginTop:12,
         borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: '#254E46', // Define a cor da linha
+        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
         marginBottom: 20,
         paddingBottom: 12, // Espaçamento entre o texto e a linha
         fontSize:16,
@@ -77,9 +77,9 @@ export default StyleSheet.create({
       },
       Text:{
         fontSize:16,
-        fontWeight:"400",
+        fontWeight:"500",
         marginTop:6,
-        color:"#606060"
+        color:"rgba(25, 25, 27, 0.9)"
       },
 
       TextRecuperar:{
@@ -94,7 +94,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: '#254E46',
+        backgroundColor: 'rgba(41, 82, 74, 0.9)',
       },
 
       buttonGoogle:{

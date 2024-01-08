@@ -17,7 +17,7 @@ export default StyleSheet.create({
     Titulo:{
         fontSize:18,
         fontWeight:"600",
-
+        color:"rgba(25, 25, 27, 0.9)"
     },
 
     ImgaEscolhida:{
@@ -74,19 +74,18 @@ export default StyleSheet.create({
       },
     input: {
         marginTop:12,
-        borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: '#254E46', // Define a cor da linha
+        borderBottomWidth: 2, 
+        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
         marginBottom: 20,
-        paddingBottom: 12, // Espaçamento entre o texto e a linha
+        paddingBottom: 12,
         fontSize:16,
-        width: '100%', // Isso faz com que o input não mude de tamanho
-
+        width: '100%', 
       },
       Text:{
         fontSize:16,
-        fontWeight:"400",
+        fontWeight:"500",
         marginTop:6,
-        color:"#606060"
+        color:"rgba(25, 25, 27, 0.9)"
       },
       img:{
         width:72,
@@ -106,7 +105,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: '#254E46',
+        backgroundColor: 'rgba(41, 82, 74, 0.9)',
       },
 
       buttonGoogle:{

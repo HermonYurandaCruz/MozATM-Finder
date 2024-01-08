@@ -65,6 +65,22 @@ export default function ListBank() {
       navigation.navigate('MapInst', { itemNome: nomeInst });
       
     }
+
+
+      const renderInstituicao = ({ item: instituicao }) => (
+    <TouchableOpacity style={styles.CardBank} onPress={() => MapInst(instituicao.nome)}>
+      <Image style={styles.imgBank} source={{ uri: instituicao.foto_urlInstituicao }} />
+      <View style={styles.infoBank}>
+        <Text style={styles.TextNomeBank}>{instituicao.nome}</Text>
+        <View style={styles.Hora}>
+          <Text>
+            <AntDesign name="heart" size={18} color="rgba(221, 87, 87, 1)" />
+          </Text>
+          <Text style={styles.curtidasText}>{instituicao.curtidas}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
   
 
 
@@ -85,32 +101,9 @@ export default function ListBank() {
       <FlatList
         data={instituicoes}
         keyExtractor={(instituicao) => String(instituicao.id)}
-        renderItem={({ item: instituicao }) => (
-          
-          <TouchableOpacity style={styles.CardBank} onPress={()=>MapInst(instituicao.nome)}>
-            <Image
-              style={styles.imgBank}
-              source={{ uri: instituicao.foto_urlInstituicao }}
-            />
+        renderItem={renderInstituicao}
+        onEndReachedThreshold={0.1}
 
-            <View style={styles.infoBank}>
-              <Text style={styles.TextNomeBank}>{instituicao.nome}</Text>
-
-              <View style={styles.Hora}>
-                <Text>
-                  <AntDesign
-                    name="heart"
-                    size={18}
-                    color="rgba(221, 87, 87, 1)"
-                  />
-                </Text>
-                <Text style={styles.curtidasText}>
-                  {instituicao.curtidas}
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
       />
     </View>
     )

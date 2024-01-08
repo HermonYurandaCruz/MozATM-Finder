@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
-import {View,ActivityIndicator,Button,TouchableOpacity , Image,Modal, TextInput,Text, ScrollView} from 'react-native';
+import {View,Linking,ActivityIndicator,Button,TouchableOpacity ,Image,Modal, TextInput,Text, ScrollView} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Checkbox from 'expo-checkbox';
 import { Ionicons,AntDesign,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import {Dropdown} from 'react-native-element-dropdown'
@@ -28,8 +29,8 @@ export default function AddBank(){
 
   
     const [estado, setEstado] = useState('0');
-    const [curtidas, setCurtidas] = useState('0');
-    const [numeroCancela, setNumeroCancela] = useState('0')
+    const [curtidas, setCurtidas] = useState(0);
+    const [numeroCancela, setNumeroCancela] = useState(0)
 
 
     const [userId, setUserId] = useState('')
@@ -45,6 +46,7 @@ export default function AddBank(){
     const [foto_urlInstituicao, setfoto_urlInstituicao] = useState('')
     const [foto_urlMaly, setFoto_urlMaly] = useState('')
     const [fotoURL,setFotoURL]= useState('')
+    const [isChecked, setChecked] = useState(false);
 
 
     
@@ -61,6 +63,17 @@ export default function AddBank(){
     const [showText, setShowText] = useState(true);
     const [errorText, setErrorText] = useState('');
 
+
+    const openURLServicos=async()=>{
+      const url = 'https://malyspot.netlify.app/termos.html'; // TERMOS DE USO URL que deseja abrir
+      
+      const supported = await Linking.canOpenURL(url);
+        if (supported) {
+          await Linking.openURL(url);
+        } else {
+          console.error('Não é possível abrir o link:', url);
+        }
+    }
 
     const retrieveUserData = async () => {
       try {
@@ -135,8 +148,7 @@ export default function AddBank(){
         loadInstituicoes();
       }
 
-
-    
+   
 
 
     function getCurrentDate() {
@@ -186,6 +198,11 @@ export default function AddBank(){
             setErrorText('Por favor, aguarde um momento.');
             return;
           }
+
+          if (!isChecked) {
+            setErrorText('Por favor, aceite os termos e Condicoes .');
+            return;
+          } 
 
     
     try {
@@ -299,6 +316,10 @@ export default function AddBank(){
           console.error('Erro ao selecionar a foto:', error);
         }
       };
+
+      const handleCheckBoxChange = () => {
+        setIsChecked(!isChecked);
+      };
       
     
 
@@ -315,7 +336,7 @@ export default function AddBank(){
     return(
         <View style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
                     <Text style={styles.TextHeade}>Registrar</Text>
                 </View>
          <ScrollView
@@ -358,9 +379,9 @@ export default function AddBank(){
         />   
 
 
-        <Text style={styles.TituloATM}>Nome do Banco</Text>
+        <Text style={styles.Titulo}>Nome do Banco</Text>
         <Dropdown
-          style={[styles.dropdown, isFocus && { borderColor: 'rgba(37, 78, 70, 1)' }]}
+          style={[styles.dropdown, isFocus && { borderColor: 'rgba(41, 82, 74, 0.9)' }]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           inputSearchStyle={styles.inputSearchStyle}
@@ -394,7 +415,7 @@ export default function AddBank(){
           )}
         />  
 
-                         <Text style={styles.Text}>Endereço</Text>
+                         <Text style={styles.Titulo}>Endereço</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder='Avenida ou Rua'
@@ -405,7 +426,7 @@ export default function AddBank(){
 
                         {selectedOption === 'Agente' && (
                                 <View>
-                                      <Text style={styles.Text}>Nome do Propretario</Text>
+                                      <Text style={styles.Titulo}>Nome do Propretario</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder='Digite o Nome do Proprietario'
@@ -413,7 +434,7 @@ export default function AddBank(){
                                 onChangeText={(text) => setNomePropretario(text)}
                             />
 
-                             <Text style={styles.Text}>Contacto</Text>
+                             <Text style={styles.Titulo}>Contacto</Text>
                                     <TextInput
                                     placeholder='exemplo:8600000'
                                     style={styles.input}
@@ -421,7 +442,7 @@ export default function AddBank(){
                                     onChangeText={(text) => setContacto(text)}
                                     />
 
-                           <Text style={styles.TextForm}>Cogigo do Agente</Text>
+                           <Text style={styles.Titulo}>Cogigo do Agente</Text>
                                 <TextInput
                                 style={styles.input}
                                 placeholder='Digite o codigo'
@@ -434,7 +455,7 @@ export default function AddBank(){
                                   
                                   <TouchableOpacity onPress={selecionarFoto}>
                                   <Ionicons name="images-outline" size={64} color="rgba(41, 82, 74, 0.85)" />
-                                  <Text>Adicionar uma foto da Banca</Text>
+                                  <Text style={styles.Titulo}>Adicionar uma foto da Banca</Text>
 
                                 </TouchableOpacity>
                                 )}
@@ -442,6 +463,23 @@ export default function AddBank(){
 
                                 </View>
                             )}  
+
+                           <View style={styles.checkView}>                         
+                             <Checkbox
+                              style={styles.checkbox}
+                              value={isChecked}
+                              onValueChange={setChecked}
+                              color={isChecked ? '#254E46' : undefined}
+                            />
+                            <Text style={styles.Text}>
+                            Concordo com os termos e condições.
+                            </Text>
+                            <Text style={styles.TextLer} onPress={openURLServicos}>
+                              Ler   
+                            </Text>
+
+                          </View>
+                         
 
                             <Modal
                                 animationType="slide"

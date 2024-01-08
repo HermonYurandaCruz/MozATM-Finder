@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useLayoutEffect } from 'react';
 import {View,Linking,ScrollView, Modal,TouchableOpacity,Text,Image} from 'react-native';
 import perfilImg from '../../../src/assets/perfil.png';
 import { AntDesign,Ionicons,MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
@@ -17,14 +17,11 @@ export default function Setting(){
   const [userData, setUserData] = useState(null);
   const [userName, setUserName] = useState('')
   const [imagemPerfil, setImagemPerfil] = useState('')
+  const [servico, setServico] = useState('')
 
   const [userApelido, setUserApelido] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [userId, setUserId] = useState('')
-
-
-  const email = 'hermondacruz73@gmail.com'; // E-mail pré-definido
-  const body = ` `;
 
   const retrieveUserData = async () => {
     try {
@@ -39,11 +36,9 @@ export default function Setting(){
   };
 
 
-  const carregarDadosAtuais = async () => {
-    try {
-      const userRef = firebase.firestore().collection('users').doc(userId);
-      const userDoc = await userRef.get();
-  
+  const carregarDadosAtuais = (userId) => {
+    const userRef = firebase.firestore().collection('users').doc(userId);
+    userRef.onSnapshot((userDoc) => {
       if (userDoc.exists) {
         const userData = userDoc.data();
         setUserName(userData.nome || '');
@@ -51,16 +46,19 @@ export default function Setting(){
         setUserEmail(userData.email || '');
         setImagemPerfil(userData.fotoURL || perfilImg)
       } else {
+        setUserName('');
+        setUserApelido('');
+        setUserEmail('');
+        setImagemPerfil(perfilImg);
         console.error('Usuário não encontrado.');
       }
-    } catch (error) {
-      console.error('Erro ao carregar dados do usuário:', error);
-    }
+    });
   };
+
+
 
   const abrirPOP= async ()=>{
     setShowPopup(true);
-    console.log(' entrou no metodo ');
 
   }
 
@@ -82,6 +80,38 @@ export default function Setting(){
     navigation.navigate('StoreAdd');
   };
 
+  const openHelp = () => {
+    navigation.navigate('Help');
+  };
+
+  const openAdmin = () => {
+    navigation.navigate('Admin');
+  };
+
+
+const openURLServicos=async()=>{
+  const url = 'https://malyspot.netlify.app/termos.html'; // TERMOS DE USO URL que deseja abrir
+  
+  const supported = await Linking.canOpenURL(url);
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      console.error('Não é possível abrir o link:', url);
+    }
+}
+
+  const openURLPoliticas = async () => {
+    const url = 'https://malyspot.netlify.app/privace.html'; //  URL que deseja abrir
+
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      await Linking.openURL(url);
+    } else {
+      console.error('Não é possível abrir o link:', url);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userData');
@@ -91,11 +121,7 @@ export default function Setting(){
       console.error('Erro ao fazer logout:', error);
     }
   }
-  const enviarEmail=async()=>{
-    const subject = 'Suporte- Obter Ajuda';
-    const mailTo = `mailto:${email}?subject=${subject}&body=${body}`;
-    Linking.openURL(mailTo);
-  }
+
 
 
   const renderizarImagem = () => {
@@ -106,6 +132,25 @@ export default function Setting(){
     }
   };
 
+
+
+  const renderizarComponentes  = () => {
+    console.log(' entrou no  userEmail', userEmail);
+
+  if (userEmail === 'malyFinder@gmail.com') {
+    return (
+      <View>
+        <View style={styles.separator}></View>
+        <TouchableOpacity style={styles.botoes} onPress={openAdmin}>
+          <MaterialIcons name="logout" size={20} color="#000" />
+          <Text style={styles.texto}>Adicionar Dados</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  return null; // Retorna null se o email não corresponder
+};
+
   useEffect(() => {
     retrieveUserData();
   }, []);
@@ -113,12 +158,16 @@ export default function Setting(){
   useEffect(() => {
     if (userData) {
         setUserId(userData.id)
+        carregarDadosAtuais(userData.id)
+
     }
+
   }, [userData]);
   useEffect(()=>{
-    carregarDadosAtuais();
     renderizarImagem();
-  })
+  },)
+
+  
 
 
 
@@ -126,13 +175,12 @@ export default function Setting(){
       <View style={styles.container}>
 
           <View style={styles.heade}>
-                    <Text style={styles.TextHeade}>Perfil</Text>
+                    <Text style={styles.TextHeade}>Definições</Text>
           </View>
           
          
           <ScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
         >
 
           <View style={styles.perfil}>
@@ -169,24 +217,24 @@ export default function Setting(){
             <Text style={styles.Titulo}>Suporte</Text>
             <View style={styles.box}>
                 
-                <TouchableOpacity style={styles.botoes} onPress={enviarEmail} >
+                <TouchableOpacity style={styles.botoes} onPress={openHelp} >
                   <Ionicons name="md-help-buoy-outline" size={20} color="black" />
                   <Text style={styles.texto}>Obter ajuda</Text>
                 </TouchableOpacity>
                 <View style={styles.separator}></View>
 
                 
-                <View style={styles.botoes}>
+                <TouchableOpacity style={styles.botoes}onPress={openURLServicos}>
                   <Ionicons name="ios-document-text-outline" size={20} color="black" /> 
                   <Text style={styles.texto}>Ver termos e serviços</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.separator}></View>
 
 
-                <View style={styles.botoes}>
+                <TouchableOpacity style={styles.botoes} onPress={openURLPoliticas}>
                   <AntDesign name="lock" size={20} color="black" />   
                   <Text style={styles.texto}>Ver politicas de privacidade</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.separator}></View>
 
             </View>
@@ -194,17 +242,13 @@ export default function Setting(){
             <Text style={styles.Titulo}>Conta</Text>
             <View style={styles.box}>
                 <TouchableOpacity style={styles.botoes} onPress={abrirPOP}>
-                  <MaterialIcons name="logout" size={20} color="black" />
-                  <Text style={styles.texto}>Terminar sessão</Text>
+                  <MaterialIcons name="logout" size={20} color="#F23232" />
+                  <Text style={styles.textoSair}>Terminar sessão</Text>
                 </TouchableOpacity>
-                <View style={styles.separator}></View>
 
+                {renderizarComponentes()}
 
-                <View style={styles.botoes}>
-                  <AntDesign name="deleteuser" size={20} color="black" />
-                  <Text style={styles.texto}>Apagar conta</Text>
-                </View>
-
+          
 
                 <Modal
                       animationType="slide"
@@ -221,7 +265,7 @@ export default function Setting(){
 
                           <View style={styles.botoes}>
                               <TouchableOpacity style={styles.sim} onPress={handleLogout}>
-                                <Text style={styles.textButton}>Sim</Text>
+                                <Text >Sim</Text>
                               </TouchableOpacity>
 
                               <TouchableOpacity style={styles.nao} onPress={() => setShowPopup(false)}>
@@ -236,8 +280,6 @@ export default function Setting(){
                       
                       </View>
                 </Modal>  
-
-                <View style={styles.separator}></View>
 
 
             </View>

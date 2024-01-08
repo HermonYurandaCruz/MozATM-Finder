@@ -1,5 +1,19 @@
 {
   "expo": {
+    
+    "expo": {
+      "plugins": [
+        [
+          "expo-build-properties",
+          {
+            "ios": {
+              "useFrameworks": "static"
+            }
+          }
+        ]
+      ]
+    },
+    
     "name": "moz_atm_finder",
     "slug": "moz_atm_finder",
     "version": "1.0.0",
@@ -15,6 +29,7 @@
       "**/*"
     ],
     "ios": {
+      
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Permita o acesso à localização para usar o mapa"

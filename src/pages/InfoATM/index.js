@@ -1,5 +1,5 @@
-import React,{useState,useEffect} from "react";
-import {View,Modal,KeyboardAvoidingView,Text,Image,TouchableOpacity, TextInput, ActivityIndicator, FlatList} from 'react-native';
+import React,{useState,useEffect,useRef } from "react";
+import {View,Modal,KeyboardAvoidingView,Text,Image,TouchableOpacity,Linking, TextInput, ActivityIndicator, FlatList} from 'react-native';
 import {MaterialIcons, Ionicons,AntDesign,MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
 import styles from './styles';
 import { useNavigation,useRoute } from '@react-navigation/native';
@@ -16,6 +16,7 @@ export default function InfoATM(){
   const navigation = useNavigation();
   const [loading, setLoading] = useState(true);
   const [showPopup, setShowPopup] = useState(false);
+  const inputRef = useRef(null);
 
 
   const route = useRoute();
@@ -110,53 +111,90 @@ export default function InfoATM(){
     }
   };
 
+  
 
-    const loadComentarios = async(itemId)=>{
-      const malyRef = firebase.firestore().collection('comentarios');
-      const querySnapshot = await malyRef
-      .where('id_maly', '==', itemId)
-      .orderBy('data', 'asc')
-      .get();
 
-      const comentario = [];
-
-      querySnapshot.forEach((doc) => {
-        comentario.push({ id: doc.id, ...doc.data() });
+  const loadComments = async (itemId) => {
+    try {
+      const commentSnapshot = await firebase.firestore()
+        .collection('comentarios')
+        .where('id_maly', '==', itemId)
+        .orderBy('data', 'asc')
+        .get();
+  
+      const commentsData = [];
+  
+      const userPromises = []; // Array para armazenar as promises das consultas de usuário
+  
+      for (const doc of commentSnapshot.docs) {
+        const comment = doc.data();
+  
+        // Adiciona as promises de consulta de usuário ao array
+        const userPromise = firebase.firestore()
+          .collection('users')
+          .doc(comment.id_user)
+          .get();
+  
+        userPromises.push(userPromise);
+  
+        commentsData.push(comment);
+      }
+  
+      // Executa todas as consultas de usuário em paralelo
+      const userSnapshots = await Promise.all(userPromises);
+  
+      userSnapshots.forEach((userSnapshot, index) => {
+        if (userSnapshot.exists) {
+          const userData = userSnapshot.data();
+          commentsData[index].nomeUser = userData.nome; // Atualiza o nome do usuário no comentário
+          commentsData[index].imagemPerfil = userData.fotoURL; // Atualiza a imagem do perfil no comentário
+        }
       });
-
-      setComentarios(comentario)
-  }
-
-  const enviarComentario = async () => {
-        const diaTime = new Date();
-        const timestamp = firebase.firestore.Timestamp.fromDate(diaTime);
-
-        if(!textComentario || !userName || !userId){
-      console.log('sem comentario')
+  
+      setComentarios(commentsData);
+    } catch (error) {
+      console.error('Erro ao carregar comentários:', error);
     }
-    
-    setTextComentario("");
-    try{ 
-        await firebase.firestore().collection('comentarios').add({
-        id_maly: idMaly,
-        id_user:userId,
-        nomeUser:userName,
-        data:timestamp,
-        diaText:dia,
-        textComentario:textComentario,
-        imagemPerfil:imagemPerfil
-      })
+  };
+  
 
-      }catch (error){
-      console.error('Erro ao criar comentario:', error);
 
+    const enviarComentario = async () => {
+          inputRef.current.blur();
+          const diaTime = new Date();
+          const timestamp = firebase.firestore.Timestamp.fromDate(diaTime);
+
+          if(!userName || !userId){
+            console.log('sem comentario')
+            return;
+            }
+            if(!textComentario){
+              console.log('sem comentario')
+              return;
+            }
+      
+      setTextComentario("");
+      try{ 
+          await firebase.firestore().collection('comentarios').add({
+          id_maly: idMaly,
+          id_user:userId,
+          nomeUser:userName,
+          data:timestamp,
+          diaText:dia,
+          textComentario:textComentario,
+          imagemPerfil:imagemPerfil
+        })
+
+        }catch (error){
+        console.error('Erro ao criar comentario:', error);
+
+
+      }
+      loadComments (itemId);
 
     }
-    loadComentarios(itemId);
 
-  }
-
-  const carregarDadosAtuais = async () => {
+  const carregarDadosAtuais = async (userId) => {
     try {
       const userRef = firebase.firestore().collection('users').doc(userId);
       const userDoc = await userRef.get();
@@ -177,13 +215,10 @@ export default function InfoATM(){
 
   const abrirPOP= async ()=>{
     setShowPopup(true);
-    console.log(' entrou no metodo ');
-
   }
 
   const cancelarMaly = async () => {
     try {
-      console.log('Número de cancelamentos atual:', numeroCancela);
 
       const novoNumeroCancelamentos = numeroCancela + 1;
 
@@ -253,6 +288,20 @@ export default function InfoATM(){
 
   };
 
+  const handleCall = (phoneNumber) => {
+    Linking.openURL(`tel:${phoneNumber}`);
+  };
+
+  const openInMap=(lat,log)=>{
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${log}`;
+    Linking.openURL(url);
+  }
+
+  const shareLocation =(lat,log, tipo)=>{
+    const message = `Confira a localização do ${tipo} aqui: https://www.google.com/maps?q=${lat},${log}`;
+    Linking.openURL(`sms:?body=${message}`);
+  }
+
 
   async function fetchCurtidaState() {
     try {
@@ -273,7 +322,7 @@ export default function InfoATM(){
   
 
   const renderizarImagem = (urlImage) => {
-    console.log('imagem uri',urlImage)
+    
     if (urlImage) {
       return <Image style={styles.img} source={{ uri: urlImage }} />;
     } else {
@@ -281,16 +330,17 @@ export default function InfoATM(){
     }
   };
   
+  
 
   useEffect(() => {
     getMalyData(itemId);
-    loadComentarios(itemId);
+    loadComments (itemId);
     retrieveUserData();
     const today = getCurrentDate();
     setDia(today)
     setCurtidas(data.curtidas)
 
-  }, []);
+  }, [itemId]);
 
   useEffect(() => {
     retrieveUserData();
@@ -305,7 +355,7 @@ export default function InfoATM(){
   }, [userData]);
 
   useEffect(()=>{
-    carregarDadosAtuais();
+    carregarDadosAtuais(userId);
     setNumeroCancela(data.numeroCancela)
     setCurtidas(data.curtidas)
     setIdInstituicao(data.idInstituicao);
@@ -323,57 +373,61 @@ export default function InfoATM(){
   },)
 
 
-
-
-
-
-
     return(
       <View style={styles.container}>
        <View style={styles.heade}>
-          <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+          <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
           <Text style={styles.Titulo}>{data.nomeInstituicao}</Text>
           <Entypo style={styles.iconARch} name="block" size={24} color="red" onPress={abrirPOP} />
        </View>
 
        {loading && (
-                  <ActivityIndicator size="small"  color="#000" style={styles.loadingIndicator} />
+                  <ActivityIndicator size="small"  color="rgba(25, 25, 27, 0.8)" style={styles.loadingIndicator} />
                 )}
                 <Image
                   style={styles.ImagemBank}
                   source={{uri:data.foto_urlMaly}}
                   onLoadEnd={() => setLoading(false)}
                 />
-
-
-
-
         
         <View style={styles.UserNameAdd}>
-          <Text>Adicioado Por:</Text>
-          <Text>{data.userNomeAdd}</Text>
+          <Ionicons name="person-add-outline" size={16} color="rgba(25, 25, 27, 0.8)" />
+          <Text style={styles.textDados}> {data.userNomeAdd}</Text>
+        </View>
+
+        <View style={styles.UserNameAdd}>
+          <Ionicons name="location-outline" size={16} color="rgba(25, 25, 27, 0.8)" />
+          <Text style={styles.textDados}> {data.endereco}</Text>
+        </View>
+
+        <View style={styles.UserNameAdd}>
+          <MaterialCommunityIcons name="bank-outline" size={16} color="rgba(25, 25, 27, 0.8)" />
+          <Text style={styles.textDados}> {data.tipoMaly} </Text>
+          <Text style={styles.textDados}> {data.nomePropretario} </Text>
+          <Text style={styles.textCodigoAgente}> {data.codigoAgente}</Text>
         </View>
 
         <View style={styles.dados}>
         <TouchableOpacity style={styles.gosto} onPress={handleCurtir}>
           <AntDesign name={curtida ? 'heart' : 'hearto'} size={16} color={curtida ? 'red' : 'black'} />
-          <Text>{data.curtidas}</Text>
+          <Text style={styles.textBox}> {data.curtidas}</Text>
       </TouchableOpacity>
 
-          <View style={styles.Hora}>
-          <Ionicons name="call-sharp" size={15} color="rgba(25, 25, 27, 0.8)" />
-                  <Text>
+          <TouchableOpacity style={styles.Hora} onPress={() => handleCall(data.contacto)}>
+          <Ionicons name="call-sharp" size={15} color="rgba(25, 25, 27, 0.8)"  />
+                  <Text style={styles.textBox}>
                   Ligar
                   </Text>
-          </View>
-
-          <TouchableOpacity style={styles.buttonDireção}>
-                        <MaterialCommunityIcons name="directions" size={16} color="rgba(25, 25, 27, 0.8)" />
-                        <Text style={styles.textButton}>Direção</Text>    
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonMais}>
-                        <Text style={styles.textButton}>Fechado</Text>
+          <TouchableOpacity style={styles.buttonDireção} onPress={() => openInMap(data.latitude,data.longitude)} >
+                        <MaterialCommunityIcons name="directions" size={16} color="rgba(25, 25, 27, 0.8)" />
+                        <Text style={styles.textBox} >Direção</Text>    
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buttonMais}  onPress={() => shareLocation(data.latitude,data.longitude, data.tipoMaly)}>
+            <Entypo name="share" size={15} color="rgba(25, 25, 27, 1)" />
+            <Text style={styles.textBox} >Partilhar</Text>
           </TouchableOpacity>
         </View>
 
@@ -384,6 +438,7 @@ export default function InfoATM(){
           style={styles.caixaComentarios}
           data={comentarios}
           showsVerticalScrollIndicator={false}
+          initialNumToRender={5}
           keyExtractor={comentarios=> String(comentarios.id)} 
           renderItem={({item:comentarios})=>(
             <View style={styles.comentario}>
@@ -409,12 +464,14 @@ export default function InfoATM(){
         <TextInput
                   placeholder='Adicionar comentario'
                   value={textComentario}
+                  multiline={true}
                   onChangeText={(text) => setTextComentario(text)}
-                  style={styles.input}
+                  ref={inputRef}
+                  style={[styles.input]}
                   />
          <TouchableOpacity style={styles.Enviar} onPress={enviarComentario}>
-             <MaterialCommunityIcons name="send-outline" size={24} color="black" />
-          </TouchableOpacity>
+         <MaterialCommunityIcons name="send-circle" size={52} color="rgba(37, 78, 70, 1)" />
+                   </TouchableOpacity>
        </KeyboardAvoidingView>
 
        <Modal

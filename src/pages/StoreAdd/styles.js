@@ -9,9 +9,9 @@ export default StyleSheet.create({
         paddingTop:Constants.statusBarHeight +16 ,
     },
     Text:{
-        fontSize:17,
-        fontWeight:"700",
-        color:"#19191B",
+        fontSize:18,
+        fontWeight:"600",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     loadingIndicator:{
         position:"absolute",
@@ -37,6 +37,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 10,
+        marginTop:8
         },
 
     tab: {
@@ -114,15 +115,18 @@ export default StyleSheet.create({
     },
     
     TextNomeBank:{
-        fontSize:15,
-        fontWeight:"600",
+        fontSize:16,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.9)"
     },
     TextTypoBank:{
-        fontSize:14,
+        fontSize:15,
         fontWeight:"400",
     },
     TextAndereco:{
-        marginTop:2
+        marginTop:2,
+        fontSize:15,
+        fontWeight:"400",
     },
     buttonDireção:{
         marginEnd:8

@@ -16,8 +16,7 @@ export default StyleSheet.create({
     perfil:{
         alignItems:"center"
     },
-     scrollView:{
-    },
+ 
     box:{
         paddingVertical: 12,
         paddingHorizontal: 8,
@@ -38,10 +37,18 @@ export default StyleSheet.create({
       },
       texto:{
         marginStart:4,
-        fontSize:14,
+        fontSize:16,
+        fontWeight:"400",
+      },
+      textoSair:{
+        fontSize:16,
+        fontWeight:"500",
+        color:"#F23232",
+        fontWeight:"500",
+
       },
       Titulo:{
-        fontSize:14,
+        fontSize:15,
         fontWeight:"500",
         marginTop:16,
         marginBottom:4,
@@ -50,12 +57,12 @@ export default StyleSheet.create({
         
     },
     textoNome:{
-        fontSize:16,
+        fontSize:18,
         fontWeight:"500",
     },
     textoEmail:{
-        fontSize:14,
-        fontWeight:"400",
+        fontSize:16,
+        fontWeight:"500",
         color:"rgba(147, 147, 147, 1)",
 
     },
@@ -105,14 +112,15 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         marginEnd:4,
         marginTop:4,
-        backgroundColor:"rgba(99, 181, 71, 1)"
+        backgroundColor:"#F8F8F8"
       },
       nao:{
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 20,
         marginTop:4,
-        backgroundColor:"#DD5757"
+        backgroundColor:"rgba(41, 82, 74, 0.9)"
+
       },
       textButton:{
          color:"#FFFFFF"

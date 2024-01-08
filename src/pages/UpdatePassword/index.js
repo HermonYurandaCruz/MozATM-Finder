@@ -50,11 +50,8 @@ export default function UpdatePassword(){
       
         } catch (error) {
           console.error('Erro ao alterar senha:', error);
-          // Aqui você pode tratar diferentes tipos de erros, por exemplo:
-          // - Senha muito fraca
-          // - Erros de conexão
-          // - Outros erros específicos do Firebase Authentication
-          return false; // Indica que houve um erro ao alterar a senha
+          
+          return false; 
         }
       };
       
@@ -62,7 +59,7 @@ export default function UpdatePassword(){
     return(
         <View style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
                     <Text style={styles.Titulo}>Mudar senha</Text>
                 </View>
  

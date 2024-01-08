@@ -16,7 +16,6 @@ export default StyleSheet.create({
     Titulo:{
         fontSize:18,
         fontWeight:"600",
-
     },
 
     dadosNome: {
@@ -44,7 +43,7 @@ export default StyleSheet.create({
     },
 
     containerRecuperar:{
-        marginTop:32,
+        marginTop:14,
         flexDirection:"row",
     },
 
@@ -60,14 +59,14 @@ export default StyleSheet.create({
     },
     TextForm:{
         fontSize:16,
-        fontWeight:"400",
+        fontWeight:"500",
         marginTop:8,
-        color:"#606060"
+        color:"rgba(25, 25, 27, 0.9)"
       },
     input: {
         marginTop:12,
         borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: '#254E46', // Define a cor da linha
+        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
         marginBottom: 20,
         paddingBottom: 12, // Espaçamento entre o texto e a linha
         fontSize:16,
@@ -76,9 +75,9 @@ export default StyleSheet.create({
       },
       Text:{
         fontSize:16,
-        fontWeight:"400",
+        fontWeight:"500",
         marginTop:6,
-        color:"#606060"
+        color:"rgba(25, 25, 27, 0.9)"
       },
 
       TextRecuperar:{
@@ -93,7 +92,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: '#254E46',
+        backgroundColor: 'rgba(41, 82, 74, 0.9)',
       },
 
       buttonGoogle:{
@@ -119,12 +118,10 @@ export default StyleSheet.create({
         fontWeight:"bold",
       },
       Text2:{
-        fontSize:16,
-        fontWeight:"400",
-        marginTop:6,
-        color:"#0F5257", 
+        fontSize:15,
+        fontWeight:"700",
         marginStart:4,
-        fontWeight:"500"
+        color:"rgba(41, 82, 74, 0.9)",    
       },
       Text3:{
         fontSize:16,
@@ -135,6 +132,11 @@ export default StyleSheet.create({
         textAlign:"center"
       },
 
+      Textm:{
+        fontSize:15,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.8)",
+      },
       errorText:{
         color:"#DD5757",
         marginTop:4,
@@ -144,6 +146,22 @@ export default StyleSheet.create({
       icon: {
         width: 24,
         height: 24,
+      },
+      checkView:{
+        flexDirection:"row",
+        alignItems:"center",
+        marginBottom:8
+      },
+      Textcheck:{
+        fontSize:15,
+        marginStart:4,
+        fontWeight:"400"
+      },
+      TextLer:{
+        fontSize:15,
+        marginStart:2,
+        color:"rgba(41, 82, 74, 0.9)",
+        fontWeight:"600"
       }
 
 });

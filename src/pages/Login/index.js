@@ -2,7 +2,7 @@ import React, {useState,useLayoutEffect} from 'react';
 import {View,ActivityIndicator,TouchableOpacity,Modal, Image, TextInput,Text} from 'react-native';
 import { useNavigation  } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AntDesign,Ionicons,MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
+import { Feather,Ionicons,MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
 
 import {firebase} from '../../services/firebaseConfig'
 
@@ -31,7 +31,6 @@ export default function Login(){
 
 
 
-
     const handleLoginPress = async () => {
       if (!email || !senha) {
         setErrorText('Por favor, preencha todos os campos.');
@@ -44,16 +43,23 @@ export default function Login(){
         setErrorText(''); // Limpa qualquer mensagem de erro anterior
     
         const userCredential = await firebase.auth().signInWithEmailAndPassword(email, senha);
-        
-          const userDoc = await firebase.firestore().collection('users').doc(userCredential.user.uid).get();
-          if (userDoc.exists) {
-            const userData = { id: userCredential.user.uid, ...userDoc.data() };
-            await AsyncStorage.setItem('userData', JSON.stringify(userData));
-            navigation.replace('TabScreen');
-          }
-
+    
+        if (!userCredential.user.emailVerified) {
+          setErrorText('Por favor, verifique seu e-mail antes de fazer login.');
+          setLoading(false);
+          setShowText(true);
+          return;
+        }
+    
+        const userDoc = await firebase.firestore().collection('users').doc(userCredential.user.uid).get();
+        if (userDoc.exists) {
+          const userData = { id: userCredential.user.uid, ...userDoc.data() };
+          await AsyncStorage.setItem('userData', JSON.stringify(userData));
+          navigation.replace('TabScreen');
+        }
+    
         return userCredential.user;
-
+    
       } catch (error) {
         console.error('Erro ao logar usuário:', error);
         setErrorText('Erro ao efetuar Login. Por favor, tente novamente.'); // Define mensagem de erro
@@ -62,6 +68,7 @@ export default function Login(){
         setShowText(true);
       }
     };
+    
     
       const handleRegisterPress = () => {
         navigation.replace('Register');
@@ -107,8 +114,7 @@ export default function Login(){
         
             <View style={styles.containerLogo}>
                 <Image style={styles.logoImag} source={logoImg}/>
-                <Text style={styles.TextBemVindo}>Seja bem vindo ao</Text>
-                <Text style={styles.TextBold}>MozATM Finder</Text>
+                <Text style={styles.TextBold}>MalySpot</Text>
             </View>
          
             <View style={styles.formLogin}>
@@ -145,25 +151,10 @@ export default function Login(){
             )}
             </TouchableOpacity>
             {errorText !== '' && <Text style={styles.errorText}>{errorText}</Text>}
-
-               
-
-               
-           
-                <Text style={styles.Text3}>Inicie sessão com</Text>
-                <TouchableOpacity style={styles.buttonGoogle}>
-                    <View style={styles.buttonContent}>
-                        <Image
-                        source={logoGoogle} // Substitua pelo caminho do seu ícone
-                        style={styles.icon}
-                        />
-                        <Text style={styles.textGoogle}>Iniciar sessão com Google</Text>
-                    </View>
-                </TouchableOpacity>
-
+                
                 <View style={styles.containerRecuperar}>
-                <Text style={styles.Text}>Não tem uma conta?</Text>
-                <Text style={styles.Text2} onPress={handleRegisterPress}>criar agora</Text>
+                <Text style={styles.Textm}>Não tem uma conta?</Text>
+                <Text style={styles.Text2} onPress={handleRegisterPress}>Criar agora</Text>
                 </View>
 
 
@@ -177,7 +168,7 @@ export default function Login(){
                       onRequestClose={() => setShowPopup(false)}
                        >
                       <View style={styles.modalView}>
-                          <MaterialIcons name="logout" size={42} color="rgba(41, 82, 74, 0.68)" />
+                          <Feather name="help-circle" size={42} color="rgba(41, 82, 74, 0.68)" />
                           <Text style={styles.titlePopUp}>Esqueceu a senha?</Text>
                           <Text>Por favor, insira seu endereço de e-mail.</Text>
 
@@ -209,13 +200,7 @@ export default function Login(){
                       </View>
                 </Modal>  
 
-                        
-
-
-               
-
-                
-            </View>
+             </View>
         </View>
     )
 }

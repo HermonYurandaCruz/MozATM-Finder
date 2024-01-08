@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'react-native';
+import {View,ActivityIndicator,TouchableOpacity , Linking, TextInput,Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
 import {firebase} from '../../services/firebaseConfig'
+import Checkbox from 'expo-checkbox';
 
 import styles from './styles';
 
@@ -23,6 +24,7 @@ export default function Login(){
     const [loading, setLoading] = useState(false);
     const [showText, setShowText] = useState(true);
     const [errorText, setErrorText] = useState('');
+    const [isChecked, setChecked] = useState(false);
 
 
     const handleLogin = () => {
@@ -42,6 +44,11 @@ export default function Login(){
         setShowText(true);
         return;
         }
+
+        if (!isChecked) {
+            setErrorText('Por favor, aceite os termos e Condicoes .');
+            return;
+          } 
         
     try {
         setLoading(true);
@@ -50,7 +57,9 @@ export default function Login(){
 
         const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, senha);
         const { user } = userCredential;
-          // Aqui você pode tratar a resposta da API conforme necessário
+
+        await user.sendEmailVerification();
+
     
           await firebase.firestore().collection('users').doc(user.uid).set({
             nome: nome,
@@ -75,13 +84,23 @@ export default function Login(){
           }
       };
     
+      const openURLServicos=async()=>{
+        const url = 'https://malyspot.netlify.app/termos.html'; // TERMOS DE USO URL que deseja abrir
+        
+        const supported = await Linking.canOpenURL(url);
+          if (supported) {
+            await Linking.openURL(url);
+          } else {
+            console.error('Não é possível abrir o link:', url);
+          }
+      }
 
   
 
     return(
         <View style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="black" onPress={handleLogin} />
+                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={handleLogin} />
                     <Text style={styles.Titulo}>Registrar uma conta</Text>
                 </View>
 
@@ -141,6 +160,22 @@ export default function Login(){
                 value={confirmarSenha}
                 onChangeText={(text) => setconfirmarSenha(text)}
                 />
+
+                    <View style={styles.checkView}>                         
+                             <Checkbox
+                              style={styles.checkbox}
+                              value={isChecked}
+                              onValueChange={setChecked}
+                              color={isChecked ? 'rgba(41, 82, 74, 0.9)' : undefined}
+                            />
+                            <Text style={styles.Textcheck}>
+                            Concordo com os termos e condições.
+                            </Text>
+                            <Text style={styles.TextLer} onPress={openURLServicos}>
+                              Ler   
+                            </Text>
+
+                          </View>
           
 
           <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
@@ -156,23 +191,9 @@ export default function Login(){
 
                     
 
-               
-           
-                <Text style={styles.Text3}>Inicie sessão com</Text>
-                <TouchableOpacity style={styles.buttonGoogle}>
-                    <View style={styles.buttonContent}>
-                        <Image
-                        source={logoGoogle} // Substitua pelo caminho do seu ícone
-                        style={styles.icon}
-                        />
-                        <Text style={styles.textGoogle}>Iniciar sessão com Google</Text>
-                    </View>
-                    
-                </TouchableOpacity>
-
                 <View style={styles.containerRecuperar}>
-                <Text style={styles.Text}>Tem uma conta?</Text>
-                <Text style={styles.Text2}>iniciar agora</Text>
+                <Text style={styles.Textm}>Tem uma conta?</Text>
+                <Text style={styles.Text2}>Iniciar agora</Text>
                 </View>
 
                              
