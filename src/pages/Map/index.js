@@ -7,7 +7,7 @@ import {firebase} from '../../services/firebaseConfig'
 
 
 
-import { Image,TouchableOpacity, ActivityIndicator,Text, View, StyleSheet } from 'react-native';
+import { Image,TouchableOpacity, ActivityIndicator,Text, View  } from 'react-native';
 import styles from './styles';
 import gif from '../../../src/assets/giftMap.gif'
 
@@ -42,9 +42,7 @@ export default function Map(){
   const addBank=() => {
     navigation.navigate('AddBank');
   };
-  const handleMarkerPress = (id) => {
-    navigation.navigate('InfoATM', { itemId: id });
-  };
+
 
 
   useEffect(() => {
@@ -121,10 +119,9 @@ export default function Map(){
       }}
       title={item.nomeInstituicao}
       description={item.tipoMaly}
+      onCalloutPress={() => navigation.navigate('InfoATM', { itemId: item.id })} 
     >
-        <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
-          <Image style={{ width: 22, height: 22, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
-        </TouchableOpacity>    
+          <Image style={{ width: 24, height: 24, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
         </Marker>
   ))}
         </MapView>

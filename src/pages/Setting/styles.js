@@ -50,7 +50,7 @@ export default StyleSheet.create({
       Titulo:{
         fontSize:15,
         fontWeight:"500",
-        marginTop:16,
+        marginTop:12,
         marginBottom:4,
         color:"rgba(147, 147, 147, 1)",
 
@@ -69,7 +69,7 @@ export default StyleSheet.create({
     img:{
         width:92,
         height: 92,
-        marginTop:24,
+        marginTop:16,
         borderRadius: 100,
 
         

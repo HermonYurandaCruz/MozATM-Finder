@@ -116,10 +116,10 @@ export default function MapaAgentes(){
       }}
       title={item.nomeInstituicao}
       description={item.tipoMaly}
+      onCalloutPress={() => navigation.navigate('InfoATM', { itemId: item.id })} 
+
     >
-        <TouchableOpacity onLongPress={() => handleMarkerPress(item.id)}>
-          <Image style={{ width: 22, height: 22, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
-        </TouchableOpacity> 
+          <Image style={{ width: 24, height: 24, borderRadius: 100 }} source={{ uri: item.foto_urlInstituicao}} />
     </Marker>
   ))}
         </MapView>

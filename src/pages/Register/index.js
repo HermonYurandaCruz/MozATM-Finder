@@ -193,7 +193,7 @@ export default function Login(){
 
                 <View style={styles.containerRecuperar}>
                 <Text style={styles.Textm}>Tem uma conta?</Text>
-                <Text style={styles.Text2}>Iniciar agora</Text>
+                <Text style={styles.Text2} onPress={handleLogin}>Iniciar agora</Text>
                 </View>
 
                              

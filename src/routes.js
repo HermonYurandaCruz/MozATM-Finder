@@ -11,7 +11,6 @@ import Register from './pages/Register'
 import MapaAgentes from './pages/MapaAgentes';
 import MapaATM from './pages/MapaATM';
 import Store from './pages/StoreAdd';
-import UpdateBank from './pages/UpdateBank';
 import UpdateProfile from './pages/UpdateProfile';
 import Verificar from './services/api';
 import UpdatePassword from './pages/UpdatePassword';
@@ -45,7 +44,6 @@ export default function Routes(){
                 <AppStack.Screen name='MapaAgentes'component={MapaAgentes}/>
                 <AppStack.Screen name='MapaATM'component={MapaATM}/>
                 <AppStack.Screen name='StoreAdd'component={Store}/>
-                <AppStack.Screen name='UpdateBank'component={UpdateBank}/>
                 <AppStack.Screen name='UpdateProfile'component={UpdateProfile}/>
                 <AppStack.Screen name='UpdatePassword'component={UpdatePassword}/>
                 <AppStack.Screen name='Setting'component={Setting}/>

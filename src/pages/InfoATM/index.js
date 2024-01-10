@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useRef } from "react";
 import {View,Modal,KeyboardAvoidingView,Text,Image,TouchableOpacity,Linking, TextInput, ActivityIndicator, FlatList} from 'react-native';
-import {MaterialIcons, Ionicons,AntDesign,MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
+import {SimpleLineIcons, Ionicons,AntDesign,MaterialCommunityIcons,Entypo,FontAwesome} from '@expo/vector-icons';
 import styles from './styles';
 import { useNavigation,useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -298,8 +298,11 @@ export default function InfoATM(){
   }
 
   const shareLocation =(lat,log, tipo)=>{
-    const message = `Confira a localização do ${tipo} aqui: https://www.google.com/maps?q=${lat},${log}`;
-    Linking.openURL(`sms:?body=${message}`);
+    const malyFinderMessage = 'Baixe também o MalyFinder para encontrar mais serviços próximos!';
+    const message = `Confira a localização do ${tipo} aqui: https://www.google.com/maps?q=${lat},${log}\n\n${malyFinderMessage}`;
+      // Linking.openURL(`sms:?body=${message}`);
+    Linking.openURL(`whatsapp://send?text=${message}`);
+
   }
 
 
@@ -408,27 +411,28 @@ export default function InfoATM(){
         </View>
 
         <View style={styles.dados}>
-        <TouchableOpacity style={styles.gosto} onPress={handleCurtir}>
-          <AntDesign name={curtida ? 'heart' : 'hearto'} size={16} color={curtida ? 'red' : 'black'} />
-          <Text style={styles.textBox}> {data.curtidas}</Text>
-      </TouchableOpacity>
+              <TouchableOpacity style={styles.gosto} onPress={handleCurtir}>
+                <AntDesign name={curtida ? 'heart' : 'hearto'} size={16} color={curtida ? 'red' : 'black'} />
+                <Text style={styles.textBox}> {data.curtidas}</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={styles.Hora} onPress={() => handleCall(data.contacto)}>
-          <Ionicons name="call-sharp" size={15} color="rgba(25, 25, 27, 0.8)"  />
-                  <Text style={styles.textBox}>
-                  Ligar
-                  </Text>
-          </TouchableOpacity>
+                <TouchableOpacity style={styles.Hora} onPress={() => handleCall(data.contacto)}>
+                <Ionicons name="call-outline" size={15} color="rgba(25, 25, 27, 0.8)"  />
+                        <Text style={styles.textBox}>
+                        Ligar
+                        </Text>
+                </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonDireção} onPress={() => openInMap(data.latitude,data.longitude)} >
-                        <MaterialCommunityIcons name="directions" size={16} color="rgba(25, 25, 27, 0.8)" />
-                        <Text style={styles.textBox} >Direção</Text>    
-          </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonDireção} onPress={() => openInMap(data.latitude,data.longitude)} >
+                              <SimpleLineIcons name="directions" size={15} color="rgba(25, 25, 27, 0.8)" />
+                              <Text style={styles.textBox} >Direção</Text>    
+                </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonMais}  onPress={() => shareLocation(data.latitude,data.longitude, data.tipoMaly)}>
-            <Entypo name="share" size={15} color="rgba(25, 25, 27, 1)" />
-            <Text style={styles.textBox} >Partilhar</Text>
-          </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonMais}  onPress={() => shareLocation(data.latitude,data.longitude, data.tipoMaly)}>
+                  <FontAwesome name="whatsapp" size={15} color="rgba(25, 25, 27, 1)" />
+                  {/* <Entypo name="share" size={15} color="rgba(25, 25, 27, 1)" /> */}
+                  <Text style={styles.textBox} >Partilhar</Text>
+                </TouchableOpacity>
         </View>
 
         <Text style={styles.Text}>Comentarios</Text>
@@ -458,7 +462,8 @@ export default function InfoATM(){
 
        
 
-       <KeyboardAvoidingView
+       <View
+       // para ios usase o KeyboardAvoidingView para o input seguit o texto 
        style={styles.escreverComentario}
        behavior="padding" >
         <TextInput
@@ -472,7 +477,7 @@ export default function InfoATM(){
          <TouchableOpacity style={styles.Enviar} onPress={enviarComentario}>
          <MaterialCommunityIcons name="send-circle" size={52} color="rgba(37, 78, 70, 1)" />
                    </TouchableOpacity>
-       </KeyboardAvoidingView>
+       </View>
 
        <Modal
                       animationType="slide"

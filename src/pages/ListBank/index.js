@@ -71,12 +71,12 @@ export default function ListBank() {
     <TouchableOpacity style={styles.CardBank} onPress={() => MapInst(instituicao.nome)}>
       <Image style={styles.imgBank} source={{ uri: instituicao.foto_urlInstituicao }} />
       <View style={styles.infoBank}>
-        <Text style={styles.TextNomeBank}>{instituicao.nome}</Text>
+        <Text style={styles.TextNomeBank} >{instituicao.nome}</Text>
         <View style={styles.Hora}>
           <Text>
             <AntDesign name="heart" size={18} color="rgba(221, 87, 87, 1)" />
           </Text>
-          <Text style={styles.curtidasText}>{instituicao.curtidas}</Text>
+          <Text >{instituicao.curtidas}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -86,7 +86,7 @@ export default function ListBank() {
 
     return(
       <View style={styles.container}>
-      <Text style={styles.Text}>Instituições Bancárias</Text>
+      <Text style={styles.TextHeade}>Instituições Bancárias</Text>
 
       <View style={styles.inputPesquisa}>
         <Feather name="search" size={20} color="#19191B" />
@@ -100,6 +100,8 @@ export default function ListBank() {
 
       <FlatList
         data={instituicoes}
+        showsVerticalScrollIndicator={false}
+
         keyExtractor={(instituicao) => String(instituicao.id)}
         renderItem={renderInstituicao}
         onEndReachedThreshold={0.1}

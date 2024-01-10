@@ -10,7 +10,7 @@ export default StyleSheet.create({
     },
     Text:{
         fontSize:18,
-        fontWeight:"600",
+        fontWeight:600,
         color:"rgba(25, 25, 27, 0.9)"
         },
     loadingIndicator:{
@@ -37,13 +37,13 @@ export default StyleSheet.create({
     TextMedio:{
         textAlign:"center",
         fontSize:14,
-        fontWeight:"400",
+        fontWeight:400,
         marginTop:4
     },
     TextLista:{
         marginTop:16,
         fontSize:17,
-        fontWeight:"500",
+        fontWeight:500,
         color:"#19191B",
     },
 
@@ -51,10 +51,10 @@ export default StyleSheet.create({
 
     infoBank:{
         marginStart:12,
-        marginTop:8
+        marginTop:4
     },
     ListCardBank:{
-        marginTop:8
+        marginTop:4
     },
     CardBank:{
         flexDirection:"row",
@@ -90,15 +90,25 @@ export default StyleSheet.create({
     
     TextNomeBank:{
         fontSize:16,
-        fontWeight:"500",
+        fontWeight:500,
     },
     TextTypoBank:{
         fontSize:14,
-        fontWeight:"400",
+        fontWeight:400,
     },
     TextAndereco:{
         marginTop:2
-    }
+    },
 
+
+    TextHeade:{
+        fontSize:18,
+        fontWeight:"600",
+    },
+    TextNomeBank:{
+        fontSize:16,
+        fontWeight:"500",
+        color:"rgba(25, 25, 27, 0.9)"
+    },
 
 });

@@ -4,7 +4,7 @@ import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
 
-import { EvilIcons ,Ionicons,Feather,MaterialCommunityIcons,Entypo  } from '@expo/vector-icons';
+import { EvilIcons ,Ionicons,Feather,MaterialCommunityIcons,SimpleLineIcons,FontAwesome  } from '@expo/vector-icons';
 
 import {firebase} from '../../services/firebaseConfig'
 
@@ -178,8 +178,11 @@ const renderizarImagem = () => {
   };
 
   const shareLocation =(lat,log, tipo)=>{
-    const message = `Confira a localização do ${tipo} aqui: https://www.google.com/maps?q=${lat},${log}`;
-    Linking.openURL(`sms:?body=${message}`);
+    const malyFinderMessage = 'Baixe também o MalyFinder para encontrar mais serviços próximos!';
+    const message = `Confira a localização do ${tipo} aqui: https://www.google.com/maps?q=${lat},${log}\n\n${malyFinderMessage}`;
+      // Linking.openURL(`sms:?body=${message}`);
+    Linking.openURL(`whatsapp://send?text=${message}`);
+
   }
   
 const openInMap=(lat,log)=>{
@@ -281,7 +284,6 @@ useEffect(() => {
 
           <Text style={styles.Text}>Busca rápida</Text>
           <View style={styles.containerATM}>
-            <View>
             <TouchableOpacity style={styles.buttonATM} onPress={openMapATM}>
                     <View style={styles.buttonContent} >
                         <Image 
@@ -291,9 +293,8 @@ useEffect(() => {
                     <Text style={styles.TextMedio}>Encontre ATM/Banco</Text>
 
                 </TouchableOpacity>
-            </View>
+                <View style={styles.espaco}></View>
 
-            <View>
 
             <TouchableOpacity style={styles.buttonATM} onPress={openMapAgentes}>
                     <View  style={styles.buttonContent}>
@@ -304,7 +305,6 @@ useEffect(() => {
                     <Text style={styles.TextMedio}>Encontre Agentes</Text>
 
                 </TouchableOpacity>
-            </View>
 
           </View>
 
@@ -323,57 +323,52 @@ useEffect(() => {
           renderItem={({item:maly})=>(
            
             <TouchableOpacity style={styles.CardBank}  onPress={() => handleInformacoes(maly.id)}>
-                <Image
-                  style={styles.imgBank}
-                  source={{ uri: maly.foto_urlInstituicao }}
-                  onLoadEnd={() => setLoading(false)} 
-                />
+              <View style={styles.CardRow}>
+                  <Image
+                      style={styles.imgBank}
+                      source={{ uri: maly.foto_urlInstituicao }}
+                      onLoadEnd={() => setLoading(false)} 
+                    />
 
-              <View style={styles.infoBank}>
-                <Text style={styles.TextNomeBank}>{maly.nomeInstituicao}</Text>
-                <Text style={styles.TextTypoBank}>
-                <MaterialCommunityIcons name="bank-outline" size={18} color="black" />
-                {maly.tipoMaly}</Text>
+                      <View style={styles.infoBank}>
+                              <Text style={styles.TextNomeBank}>{maly.nomeInstituicao}</Text>
+                              <Text style={styles.TextTypoBank}>
+                              <MaterialCommunityIcons name="bank-outline" size={18} color="black" />
+                              {maly.tipoMaly}</Text>
 
-                <Text style={styles.TextAndereco}> 
-                <Ionicons name="md-location-outline" size={18} color="black" />
-                {maly.endereco}</Text>
-
-                <View style={styles.Hora}>
-                  <Text>
-                  <Ionicons name="time-outline" size={18} color="black" />
-                   08:00–15:00
-                  </Text>
-                </View>
-                        
+                              <Text style={styles.TextAndereco}> 
+                              <Ionicons name="md-location-outline" size={18} color="black" />
+                              {maly.endereco}</Text>
+                      </View>
+              </View>
 
               <View style={styles.buttonsCard}>
 
-                    <TouchableOpacity style={styles.buttonDireção} onPress={() => openInMap(maly.latitude,maly.longitude)}>
-                        <View style={styles.buttonContentCard}>
-                            <MaterialCommunityIcons name="directions" size={16} color="rgba(25, 25, 27, 1)" />
-                            <Text style={styles.textButton}>Direção</Text>
-                        </View>
-                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttonDireção} onPress={() => openInMap(maly.latitude,maly.longitude)}>
+                      <View style={styles.buttonContentCard}>
+                      <SimpleLineIcons name="directions" size={15} color="rgba(25, 25, 27, 0.8)" />
+                          <Text style={styles.textButton}>Direção</Text>
+                      </View>
+                  </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonDireção}  onPress={() => handleCall(maly.contacto)}>
-                        <View style={styles.buttonContentCard}>
-                        <Ionicons name="call-sharp" size={15} color="rgba(25, 25, 27, 1)" />
-                            <Text style={styles.textButton}>Contacto</Text>
-                        </View>
-                    </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttonDireção}  onPress={() => handleCall(maly.contacto)}>
+                      <View style={styles.buttonContentCard}>
+                      <Ionicons name="call-outline" size={15} color="rgba(25, 25, 27, 1)" />
+                          <Text style={styles.textButton}>Contacto</Text>
+                      </View>
+                  </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonDireção}  onPress={() => shareLocation(maly.latitude,maly.longitude, maly.tipoMaly)}>
-                        <View style={styles.buttonContentCard}>
-                            <Entypo name="share" size={15} color="rgba(25, 25, 27, 1)" />
-                            <Text style={styles.textButton}>Partilhar</Text>
-                        </View>
-                </TouchableOpacity>
+                  <TouchableOpacity style={styles.buttonDireção}  onPress={() => shareLocation(maly.latitude,maly.longitude, maly.tipoMaly)}>
+                      <View style={styles.buttonContentCard}>
+                          <FontAwesome name="whatsapp" size={15} color="rgba(25, 25, 27, 1)" />
+                          {/* <Entypo name="share" size={15} color="rgba(25, 25, 27, 1)" /> */}
+                          <Text style={styles.textButton}>Partilhar</Text>
+                      </View>
+                  </TouchableOpacity>
 
 
-                </View>
-
-              </View>
+                  </View>
+                
 
             </TouchableOpacity>
           )}

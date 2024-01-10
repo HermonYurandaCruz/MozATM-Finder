@@ -30,6 +30,8 @@ export default function UpdateProfile(){
 
    
     const [loading, setLoading] = useState(false);
+    const [loading2, setLoading2] = useState(false);
+
     const [showText, setShowText] = useState(true);
     const [errorText, setErrorText] = useState('');
 
@@ -125,6 +127,8 @@ const getPermissionAsync = async () => {
     
 
 const selecionarFoto = async () => {
+  setLoading2(true);
+
   console.log('entrou na galeria')
   const permissao = await getPermissionAsync();
   if (!permissao) return;
@@ -158,6 +162,8 @@ const selecionarFoto = async () => {
 
       setImagemURI(manipResult.uri);
       setFotoURL(fotoURL);
+      setLoading2(false);
+
     }
   } catch (error) {
     console.error('Erro ao selecionar a foto:', error);
@@ -187,7 +193,13 @@ const selecionarFoto = async () => {
                 </View>
  
                 {imagemURI ? (
-                  <Image style={styles.ImgaEscolhida} source={{ uri: imagemURI }}  />
+                  <View>
+                                      <Image style={styles.ImgaEscolhida} source={{ uri: imagemURI }}  />
+                                      {loading2 && (
+                  <ActivityIndicator size="small"  color="rgba(25, 25, 27, 0.8)" style={styles.loadingIndicator} />
+                )}
+                  </View>
+                  
                 ) : (
                   <TouchableOpacity onPress={selecionarFoto}>
                   <Ionicons style={styles.ImgaEscolhida} name="person-circle-outline" size={100} color="rgba(41, 82, 74, 0.9)" /> 

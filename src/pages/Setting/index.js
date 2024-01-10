@@ -140,7 +140,6 @@ const openURLServicos=async()=>{
 
 
   const renderizarComponentes  = () => {
-    console.log(' entrou no  userEmail', userEmail);
 
   if (userEmail === 'malyFinder@gmail.com') {
     return (

@@ -52,13 +52,16 @@ export default StyleSheet.create({
     containerATM:{
         flexDirection:"row",
         justifyContent:"space-between",
-        marginTop:8
+        marginTop:8,
     },
     buttonContent:{
         borderRadius:8,
         paddingVertical: 16,
         paddingHorizontal: 5,
         backgroundColor:"rgba(41, 82, 74, 0.15)",
+    },
+    espaco:{
+        marginStart:4
     },
     TextMedio:{
         textAlign:"center",
@@ -89,12 +92,14 @@ export default StyleSheet.create({
         marginStart:6
     },
     CardBank:{
-        flexDirection:"row",
         backgroundColor:"#FFFFFF",
         borderRadius:8,
         paddingVertical:8,
         paddingHorizontal:8,
         marginTop:8
+    },
+    CardRow:{
+        flexDirection:"row",
     },
   
     Hora:{
@@ -105,7 +110,8 @@ export default StyleSheet.create({
     },
 
     buttonsCard:{
-        flexDirection:"row"
+        flexDirection:"row",
+        marginStart:"20%"
     },
 
     buttonContentCard:{
@@ -120,7 +126,6 @@ export default StyleSheet.create({
         marginTop:4
     },
     imgBank:{
-        marginTop:18,
         width: 68,
         height: 68,
         borderRadius:8
@@ -154,8 +159,8 @@ export default StyleSheet.create({
         width:42,
         height: 42,
         borderRadius: 100,
-
-        
+       
     },
+  
 
 });

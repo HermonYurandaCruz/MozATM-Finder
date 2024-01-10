@@ -38,39 +38,39 @@ export default StyleSheet.create({
         backgroundColor:"#FFFFFF",
         borderRadius:8,
         paddingVertical:6,
-        paddingHorizontal:7,
         marginTop:12
     },
     gosto:{
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"#FFF8E0",
-        paddingHorizontal:10,
+        paddingHorizontal:8,
         paddingVertical:4,
         borderRadius:6,
-        marginEnd:10,
+        marginEnd:8,
         marginTop:4,
         marginBottom:4,
+        marginStart:"auto"
     },
 
     Hora:{
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"#E2FCFB",
-        paddingHorizontal:10,
+        paddingHorizontal:8,
         marginTop:4,
         marginBottom:4,
         borderRadius:6,
-        marginEnd:10,
+        marginEnd:8,
 
     },
     buttonDireção:{
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"rgba(0, 173, 181, 0.21)",
-        paddingHorizontal:10,
+        paddingHorizontal:8,
         borderRadius:6,
-        marginEnd:10,
+        marginEnd:8,
         marginTop:4,
         marginBottom:4,
 
@@ -79,9 +79,9 @@ export default StyleSheet.create({
         flexDirection:"row",
         alignItems:"center",
         backgroundColor:"rgba(56, 253, 182, 0.5)",
-        paddingHorizontal:10,
+        paddingHorizontal:8,
         borderRadius:6,
-        marginEnd:8,
+        marginEnd:"auto",
         marginTop:4,
         marginBottom:4,
 
@@ -104,7 +104,7 @@ export default StyleSheet.create({
     },
     textBox:{
         fontSize:14,
-        fontWeight:"500",
+        fontWeight:"normal",
         color:"rgba(25, 25, 27, 0.8)"
     },
     textCodigoAgente:{
@@ -117,7 +117,7 @@ export default StyleSheet.create({
         marginTop:16,
     },
     caixaComentarios:{
-        marginBottom:100
+        marginBottom:"24%"
     },
     dadosComentario:{
         marginStart:6
@@ -151,19 +151,18 @@ export default StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     position: 'absolute',
-    bottom: 32,
+    bottom: 8,
     left: 0,
     right: 0,
     padding: 16, 
     },
     input:{
-        padding: 16, // Adicione o padding desejado para o conteúdo na parte inferior
         backgroundColor:"#FFFFFF",
         width:"86%",
         borderRadius:8,
-        minHeight: 42,
-        fontSize:16
-        
+        minHeight: 32,
+        fontSize:16,
+        paddingHorizontal:8
     },
     Enviar:{
    
