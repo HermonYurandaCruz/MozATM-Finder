@@ -498,7 +498,7 @@ export default function InfoATM(){
                               </TouchableOpacity>
 
                               <TouchableOpacity style={styles.nao} onPress={() => setShowPopup(false)}>
-                                <Text style={styles.textButton}>Não</Text>
+                                <Text>Não</Text>
                               </TouchableOpacity>
 
                           </View>

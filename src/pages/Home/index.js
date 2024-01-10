@@ -288,7 +288,7 @@ useEffect(() => {
                     <View style={styles.buttonContent} >
                         <Image 
                         source={imgATM} 
-                        />
+                        style={styles.imgBotao}/>
                     </View>
                     <Text style={styles.TextMedio}>Encontre ATM/Banco</Text>
 
@@ -299,6 +299,9 @@ useEffect(() => {
             <TouchableOpacity style={styles.buttonATM} onPress={openMapAgentes}>
                     <View  style={styles.buttonContent}>
                         <Image 
+
+                        
+                        style={styles.imgBotao}
                         source={imgBank} 
                         />
                     </View>

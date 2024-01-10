@@ -1,19 +1,5 @@
 {
   "expo": {
-    
-    "expo": {
-      "plugins": [
-        [
-          "expo-build-properties",
-          {
-            "ios": {
-              "useFrameworks": "static"
-            }
-          }
-        ]
-      ]
-    },
-    
     "name": "MalyFinder",
     "slug": "MalyFinder",
     "version": "1.0.0",
@@ -29,22 +15,28 @@
       "**/*"
     ],
     "ios": {
-      
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Permita o acesso à localização para usar o mapa"
-      }
+      },
+      "useFrameworks": "static"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff",
-        "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
-
-      }
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.zarroc73.MalyFinder",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "eas": {
+    "projectId": "cbcac521-8b45-4cb1-9415-4411a7cae6b3"
   }
 }

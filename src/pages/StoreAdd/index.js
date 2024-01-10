@@ -173,8 +173,14 @@ export default function StoreAdd(){
                  
 
                     <View style={styles.infoBank}>
-                      <Text style={styles.TextNomeBank}>{instituicao.nomeInstituicao}</Text>
 
+                      <View style={styles.buttonsCard}>
+                      <Text style={styles.TextNomeBank}>{instituicao.nomeInstituicao}</Text>
+                      <TouchableOpacity style={styles.buttonDireção} onPress={()=>abrirPOP(instituicao.id)} >
+                              <AntDesign name="delete" size={22} color="#DD5757" />
+                      </TouchableOpacity>
+                      </View>
+                   
                       <Text style={styles.TextAndereco}> 
                       <Ionicons name="md-location-outline" size={16} color="rgba(25, 25, 27, 0.9)" />
                       {instituicao.endereco}</Text>
@@ -193,11 +199,6 @@ export default function StoreAdd(){
               
                        </View>
 
-                        <View style={styles.buttonsCard}>
-                           <TouchableOpacity style={styles.buttonDireção} onPress={()=>abrirPOP(instituicao.id)} >
-                              <AntDesign name="delete" size={18} color="#DD5757" />
-                          </TouchableOpacity>
-                        </View>
 
 
                       <Modal

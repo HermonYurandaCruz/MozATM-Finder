@@ -210,10 +210,7 @@ export default function AddBank(){
         setShowText(false);
         setErrorText(''); // Limpa qualquer mensagem de erro anterior
 
-        if(fotoURL!=null){
-          setFoto_urlMaly(fotoURL)
-        }
-        
+      
 
         await firebase.firestore().collection('maly').add({
           idInstituicao: idInstituicao,
@@ -310,6 +307,7 @@ export default function AddBank(){
         
               setImagemURI(selectedImage.uri);
               setFotoURL(fotoURL);
+              setFoto_urlMaly(fotoURL)
             }
           }
         } catch (error) {
@@ -440,12 +438,16 @@ export default function AddBank(){
                                     style={styles.input}
                                     value={contacto}
                                     onChangeText={(text) => setContacto(text)}
+                                    keyboardType='numeric'
+
                                     />
 
                            <Text style={styles.Titulo}>Cogigo do Agente</Text>
                                 <TextInput
                                 style={styles.input}
                                 placeholder='Digite o codigo'
+                                keyboardType='numeric'
+
                                 value={codigoAgente}
                                 onChangeText={(text) => setCodigoAgente(text)}
                                 />

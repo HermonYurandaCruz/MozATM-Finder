@@ -179,7 +179,7 @@ export default StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         elevation: 5,
-        marginTop:"90%",
+        marginTop:"50%",
         marginHorizontal:32,
 
       },
@@ -201,14 +201,14 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         marginEnd:4,
         marginTop:4,
-        backgroundColor:"rgba(99, 181, 71, 1)"
+        backgroundColor:"#DD5757"
       },
       nao:{
         borderRadius: 8,
         paddingVertical: 10,
         paddingHorizontal: 20,
         marginTop:4,
-        backgroundColor:"#DD5757"
+        backgroundColor:"#F8F8F8"
       },
       textButton:{
          color:"#FFFFFF"

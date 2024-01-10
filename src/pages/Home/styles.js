@@ -1,5 +1,6 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,Dimensions} from "react-native";
 import Constants from 'expo-constants';
+
 
 
 export default StyleSheet.create({
@@ -57,11 +58,11 @@ export default StyleSheet.create({
     buttonContent:{
         borderRadius:8,
         paddingVertical: 16,
-        paddingHorizontal: 5,
+        paddingHorizontal: 16,
         backgroundColor:"rgba(41, 82, 74, 0.15)",
     },
     espaco:{
-        marginStart:4
+        margin:4
     },
     TextMedio:{
         textAlign:"center",
@@ -83,9 +84,7 @@ export default StyleSheet.create({
     },
     
     loadingLista:{
-        paddingBottom:"50%",
-
-
+        paddingBottom:"25%",
     },
 
     infoBank:{
@@ -158,8 +157,12 @@ export default StyleSheet.create({
     img:{
         width:42,
         height: 42,
-        borderRadius: 100,
-       
+        borderRadius: 100, 
+    },
+
+    imgBotao:{
+        width:Dimensions.get('window').width /2-64,
+        height:Dimensions.get('window').width /2- 48,
     },
   
 

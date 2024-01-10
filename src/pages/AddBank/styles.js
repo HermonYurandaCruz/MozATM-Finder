@@ -126,7 +126,7 @@ export default StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         elevation: 5,
-        marginTop:"75%",
+        marginTop:"50%",
         marginHorizontal:32,
 
       },

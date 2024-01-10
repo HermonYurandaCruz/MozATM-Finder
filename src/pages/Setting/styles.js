@@ -67,8 +67,8 @@ export default StyleSheet.create({
 
     },
     img:{
-        width:92,
-        height: 92,
+        width:82,
+        height: 82,
         marginTop:16,
         borderRadius: 100,
 
@@ -90,7 +90,7 @@ export default StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         elevation: 5,
-        marginTop:"90%",
+        marginTop:"50%",
         marginHorizontal:32,
 
       },

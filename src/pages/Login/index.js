@@ -19,6 +19,8 @@ export default function Login(){
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [recuperaEmail, setRecuperaEmail] = useState('')
+    const [mostrarSenha, setMostrarSenha] = useState(false);
+
 
     const [loading, setLoading] = useState(false);
     const [showText, setShowText] = useState(true);
@@ -28,6 +30,11 @@ export default function Login(){
 
     
 
+
+    const toggleMostrarSenha = () => {
+      setMostrarSenha(!mostrarSenha);
+    };
+  
 
 
 
@@ -133,13 +140,21 @@ export default function Login(){
 
 
                 <Text style={styles.Text}>Senha</Text>
-                 <TextInput
+                
+                <TextInput
                 placeholder='Digite a sua senha'
                 style={styles.input}
-                secureTextEntry={true}
+                secureTextEntry={!mostrarSenha}
                 value={senha}
                 onChangeText={(text) => setSenha(text)}
                 />
+                 <TouchableOpacity onPress={toggleMostrarSenha}>
+                    <Feather
+                      name={mostrarSenha ? 'eye-off' : 'eye'}
+                      size={24}
+                      color='black'
+                    />
+                  </TouchableOpacity>
 
                 
                 <Text style={styles.TextRecuperar} onPress={abrirPOP}>Recuperar a senha</Text>

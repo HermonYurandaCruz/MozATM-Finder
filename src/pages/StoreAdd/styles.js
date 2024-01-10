@@ -104,6 +104,8 @@ export default StyleSheet.create({
 
     buttonsCard:{
         flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"space-between"
     },
 
 
@@ -129,7 +131,8 @@ export default StyleSheet.create({
         fontWeight:"400",
     },
     buttonDireção:{
-        marginEnd:8
+        marginEnd:8,
+        marginStart:"35%"
     },
     modalContainer: {
         flex: 1,
