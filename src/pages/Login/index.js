@@ -3,6 +3,7 @@ import {View,ActivityIndicator,TouchableOpacity,Modal, Image, TextInput,Text} fr
 import { useNavigation  } from '@react-navigation/native';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Feather,Ionicons,MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
+import Checkbox from 'expo-checkbox';
 
 import {firebase} from '../../services/firebaseConfig'
 
@@ -148,13 +149,19 @@ export default function Login(){
                 value={senha}
                 onChangeText={(text) => setSenha(text)}
                 />
-                 <TouchableOpacity onPress={toggleMostrarSenha}>
-                    <Feather
-                      name={mostrarSenha ? 'eye-off' : 'eye'}
-                      size={24}
-                      color='black'
-                    />
-                  </TouchableOpacity>
+                <View style={styles.checkView}>                         
+                             <Checkbox
+                              style={styles.checkbox}
+                              value={mostrarSenha}
+                              onValueChange={setMostrarSenha}
+                              color={mostrarSenha ? 'rgba(41, 82, 74, 0.9)' : undefined}
+                            />
+                            <Text style={styles.Textcheck}> Ver a senha
+                            </Text>
+                            
+
+                          </View>
+                
 
                 
                 <Text style={styles.TextRecuperar} onPress={abrirPOP}>Recuperar a senha</Text>

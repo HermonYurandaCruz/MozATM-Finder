@@ -125,6 +125,11 @@ export default StyleSheet.create({
         marginHorizontal:32,
 
       },
+      checkView:{
+        flexDirection:"row",
+        alignItems:"center",
+        marginBottom:8
+      },
       titlePopUp: {
         fontSize: 16,
         fontWeight: 'bold',
