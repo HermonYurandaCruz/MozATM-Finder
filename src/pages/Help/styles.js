@@ -5,8 +5,8 @@ import Constants from 'expo-constants';
 export default StyleSheet.create({
     container:{
         flex:1,
-        paddingHorizontal:24,
-        paddingTop:Constants.statusBarHeight +16 ,
+        paddingHorizontal:16,
+        paddingTop:8,
     },
     heade:{
         flexDirection:"row",
@@ -19,7 +19,7 @@ export default StyleSheet.create({
     },
     texto:{
         fontSize:17,
-        fontWeight:"600",
+        fontWeight:"bold",
         marginTop:22,
         marginBottom:8
     },
@@ -42,7 +42,8 @@ export default StyleSheet.create({
         fontSize:15,
         fontWeight:"700",
         marginBottom:16,
-        color:"#254E46"
+        
+        color:"rgba(19, 64, 116, 1)"
     },
     questao:{
         fontSize:16,

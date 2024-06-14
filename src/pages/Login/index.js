@@ -10,7 +10,6 @@ import {firebase} from '../../services/firebaseConfig'
 import styles from './styles';
 
 import logoImg from '../../../src/assets/logo.png'
-import logoGoogle from '../../../src/assets/google.png'
 
 
 export default function Login(){
@@ -123,10 +122,13 @@ export default function Login(){
         
         <View style={styles.container}>
         
-            <View style={styles.containerLogo}>
+            <View style={{alignItems:"center"}}>
                 <Image style={styles.logoImag} source={logoImg}/>
-                <Text style={styles.TextBold}>MalyFinder</Text>
             </View>
+            <Text style={{fontSize:42,fontWeight:"800", color:"rgba(21, 83, 237, 1)", marginTop:42}}>Bem-vindo </Text>
+            <Text style={{fontSize:22,fontWeight:"600", color:"rgba(106, 149, 255, 1)"}}>ao portal ProAcademy</Text>
+
+               
          
             <View style={styles.formLogin}>
                
@@ -154,7 +156,7 @@ export default function Login(){
                               style={styles.checkbox}
                               value={mostrarSenha}
                               onValueChange={setMostrarSenha}
-                              color={mostrarSenha ? 'rgba(41, 82, 74, 0.9)' : undefined}
+                              color={mostrarSenha ? '#4177FF' : undefined}
                             />
                             <Text style={styles.Textcheck}> Ver a senha
                             </Text>
@@ -193,7 +195,7 @@ export default function Login(){
                       onRequestClose={() => setShowPopup(false)}
                        >
                       <View style={styles.modalView}>
-                          <Feather name="help-circle" size={42} color="rgba(41, 82, 74, 0.68)" />
+                          <Feather name="help-circle" size={32} color="#4177FF" />
                           <Text style={styles.titlePopUp}>Esqueceu a senha?</Text>
                           <Text>Por favor, insira seu endereço de e-mail.</Text>
 
@@ -204,20 +206,15 @@ export default function Login(){
                           onChangeText={(text) => setRecuperaEmail(text)}
                           />
                           
-                          <View style={styles.botoes}>
                               <TouchableOpacity style={styles.sim} onPress={handlePasswordReset}>
                                 <Text style={styles.textButton}>Confirmar</Text>
                               </TouchableOpacity>
 
                               <TouchableOpacity style={styles.nao} onPress={() => setShowPopup(false)}>
-                                <Text >Cancelar</Text>
-                              </TouchableOpacity>
+                                <Text style={{color:"#FF4950", fontWeight:"500",fontSize:16}} >Cancelar</Text>
+                              </TouchableOpacity>                         
 
-                          </View>
-                         
-
-                        
-                          
+                      
                       
                       </View>
                 </Modal>  

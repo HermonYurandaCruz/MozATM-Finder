@@ -1,169 +1,128 @@
-import { StyleSheet,Dimensions} from "react-native";
+import { StyleSheet } from "react-native";
 import Constants from 'expo-constants';
 
-
-
 export default StyleSheet.create({
-
+ 
     container:{
-        flex:1,
-        paddingHorizontal:24,
-        paddingTop:Constants.statusBarHeight +16 ,
+      flex:1,
+      paddingHorizontal:16,
+      paddingTop:Constants.statusBarHeight + 24,
+      backgroundColor:"#FFFFFF",
     },
+  
     header:{
         flexDirection:"row",
-        alignItems:"center"
-    },
-    iconNotification:{
-    position:"absolute",
-    right: 0
-    },
-    TextOla:{
-        fontSize:15,
-        fontWeight:"500",
-        marginStart:6,
-        color:"rgba(25, 25, 27, 0.7)"
-        },
-    UserName:{
-        fontSize:18,
-        fontWeight:"600",
-        color:"#254E46",
-        marginStart:6
-    },
-
-    inputPesquisa:{
-        marginTop:16,
-        flexDirection:"row",
-        borderRadius: 8,
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        backgroundColor: '#FFFFFF',
-    },
-    input:{
-        fontSize:14,
-        color:"#19191B",
-        marginStart:24
-    },
-    Text:{
-        marginTop:18,
-        fontSize:18,
-        fontWeight:"600",
-        color:"rgba(25, 25, 27, 0.9)"
-    },
-    containerATM:{
-        flexDirection:"row",
+        alignItems:"center",
         justifyContent:"space-between",
-        marginTop:8,
+
     },
-    buttonContent:{
-        borderRadius:8,
-        paddingVertical: 16,
-        paddingHorizontal: 16,
-        backgroundColor:"rgba(41, 82, 74, 0.15)",
-    },
-    espaco:{
-        margin:4
-    },
-    TextMedio:{
-        textAlign:"center",
-        fontSize:14,
-        fontWeight:"500",
-        marginTop:4,
-        color:"rgba(25, 25, 27, 0.7)"
-    },
-    TextLista:{
-        fontSize:18,
-        fontWeight:"600",
-        color:"rgba(25, 25, 27, 0.9)"
-    },
-    estiloRefre:{
-        marginTop:18,
+    detalhesjogador:{
         flexDirection:"row",
         alignItems:"center",
-        justifyContent:"space-between"
-    },
-    
-    loadingLista:{
-        paddingBottom:"25%",
-    },
-
-    infoBank:{
-        marginStart:6
-    },
-    CardBank:{
-        backgroundColor:"#FFFFFF",
-        borderRadius:8,
-        paddingVertical:8,
-        paddingHorizontal:8,
-        marginTop:8
-    },
-    CardRow:{
-        flexDirection:"row",
-    },
-  
-    Hora:{
-        flexDirection:"row",
-        alignItems:"center", 
-        fontSize:15,
-        fontWeight:"400",
+        justifyContent:"space-between",
+        backgroundColor:"#4177FF",
+        paddingHorizontal:12,
+        borderRadius:12,
+        marginTop:16
     },
 
-    buttonsCard:{
+    inputPesuisar:{
+        backgroundColor:"#F8F8F6",
+        paddingVertical:12,
+        paddingHorizontal:12,
+        borderRadius:12,
         flexDirection:"row",
-        marginStart:"20%"
-    },
+        alignItems:"center",
+        marginTop:16
 
-    buttonContentCard:{
-        borderWidth:1,
+        
+    },
+    input: {
+        marginStart:12,
+        fontSize:16,
+        outlineStyle: "none",
+        
+        },
+
+        category:{
+                alignItems:"center", 
+                backgroundColor:"rgba(190, 208, 255, 0.1)", 
+                borderRadius:12,
+                 width:116, 
+                 paddingVertical:12,
+                 paddingHorizontal:6,
+                 marginEnd:6
+        },
+    quizzDia:{
         flexDirection:"row",
-        backgroundColor:"FFFFFF",
-        borderColor:"#0F5257",
-        borderRadius:8,
-        paddingVertical:2,
-        paddingHorizontal:4,
-        marginEnd:4,
+        alignItems:"center",
+        justifyContent:"space-between",
+        backgroundColor:"#3899B7",
+        paddingHorizontal:12,
+        paddingVertical:22,
+        borderRadius:12,
+        marginBottom:8
+    },
+    imgperfil:{
+        width:32,
+        height:32,
+        padding:6,
+        borderRadius:500
+    },
+    barra:{
+        backgroundColor:"rgba(232, 232, 232, 0.3)",
+        width:5,
+        height:"100%",
+        borderRadius:100
+    },
+    imagenTrofeuSP:{
+        width:74,
+        height:74
+    },
+    textTitulo:{
+        fontSize:18,
+        fontWeight:"700",
+        color:"#FFFFFF"
+    },
+    textSubTituloDodia:{
+        fontWeight:"500",
+        color:"#FFFFFF",
+    },
+    textSubTitulo:{
+        fontWeight:"500",
+        color:"#FFFFFF",
         marginTop:4
     },
-    imgBank:{
-        width: 68,
-        height: 68,
-        borderRadius:8
-    },
-    textButton:{
-        fontSize:13,
-        fontWeight:"500",
-        color:"rgba(25, 25, 27, 0.9)"
-    },
-    TextNomeBank:{
-        fontSize:16,
-        fontWeight:"500",
-        color:"rgba(25, 25, 27, 0.9)"
-    },
-        loadingIndicator:{
-        position:"absolute",
-        paddingTop:"100%",
-        paddingStart:"80%"
-    },
-    TextTypoBank:{
-        fontSize:15,
-        fontWeight:"400",
-    },
-    TextAndereco:{
-        marginTop:2,
-        fontSize:15,
-        fontWeight:"400",
+    textTituloBlack:{
+        fontSize:18,
+        fontWeight:"700",
+        color:"#063F51"
     },
 
-    img:{
-        width:42,
-        height: 42,
-        borderRadius: 100, 
-    },
+    button: {
+        borderRadius: 12,
+        paddingVertical: 12,
+        backgroundColor: '#FFFFFF',
+        marginTop:16,
+        textAlign:"center",
+        width:130
+      },
 
-    imgBotao:{
-        width:Dimensions.get('window').width /2-64,
-        height:Dimensions.get('window').width /2- 48,
+      boxMaisLidos:{
+        borderRadius:8,
+        width: '49%',
+        backgroundColor:"#F8F8F6",
+        marginEnd:8,
+        marginTop:8
     },
-  
+    dadosLivroMais:{
+        padding:10
+    },
+     capaMais:{
+        width:"100%",
+        height:170,
+        borderTopLeftRadius:8,
+        borderTopRightRadius:8
+    },
 
 });

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import {View,ActivityIndicator,TouchableOpacity , Linking, TextInput,Text} from 'react-native';
+import {View,ActivityIndicator,TouchableOpacity ,Image, Linking, TextInput,Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
 import {firebase} from '../../services/firebaseConfig'
 import Checkbox from 'expo-checkbox';
 
 import styles from './styles';
+ import imgMan from '../../assets/man.png';
+ import imgWoman from '../../assets/woman.png';
 
-
-import logoGoogle from '../../../src/assets/google.png'
 
 
 export default function Login(){
@@ -16,7 +16,8 @@ export default function Login(){
     const navigation = useNavigation();
 
     const [nome, setNome] = useState('')
-    const [sobreNome, setSobreNome] = useState('')
+    const [sexoSelecionado, setSexoSelecionado] = useState(null);
+
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [confirmarSenha, setconfirmarSenha] = useState('')
@@ -33,7 +34,7 @@ export default function Login(){
 
     const handleRegister = async () => {
 
-        if (!nome || !sobreNome || !email || !senha || !confirmarSenha) {
+        if (!nome || !sexoSelecionado || !email || !senha || !confirmarSenha) {
             setErrorText('Por favor, preencha todos os campos.');
             return;
           }
@@ -60,11 +61,13 @@ export default function Login(){
 
         await user.sendEmailVerification();
 
-    
+        console.log("user:",user)
+        console.log("user id:",user.uid)
           await firebase.firestore().collection('users').doc(user.uid).set({
             nome: nome,
-            sobreNome: sobreNome,
             email: email,
+            sexo:sexoSelecionado,
+            statusTeachers:false,
             // Adicione mais campos personalizados aqui, se necessário
           });
 
@@ -99,17 +102,40 @@ export default function Login(){
 
     return(
         <View style={styles.container}>
-                <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={handleLogin} />
+                    <Ionicons style={{marginBottom:24}} name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={handleLogin} />
                     <Text style={styles.Titulo}>Registrar uma conta</Text>
-                </View>
 
          
+                <Text style={styles.Text}>Como você se identifica?</Text>
                 <View style={styles.dadosNome}>
                 
-                    <View style={styles.dadosNome}>
-                        <View style={styles.inputWrapper}>
-                            <Text style={styles.Text}>Nome</Text>
+                <View style={styles.dadosNome}>
+        <TouchableOpacity
+          style={[
+            styles.viewSexo,
+            sexoSelecionado === 'masculino' ? { backgroundColor: 'rgba(138, 216, 246, 0.74)' } : null,
+          ]}
+          onPress={() => setSexoSelecionado('masculino')}
+        >
+          <Image style={{ width: 120, height: 120 }} source={imgMan} />
+          <Text style={styles.Text}>Masculino</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.viewSexo,
+            sexoSelecionado === 'feminino' ? { backgroundColor: 'pink' } : null,
+          ]}
+          onPress={() => setSexoSelecionado('feminino')}
+        >
+          <Image style={{ width: 120, height: 120 }} source={imgWoman} />
+          <Text style={styles.Text}>Feminino</Text>
+        </TouchableOpacity>
+      </View>
+
+                </View>
+   
+                <Text style={styles.Text}>Nome</Text>
                             <TextInput
                                 style={styles.input}
                                 placeholder='Digite o seu Nome'
@@ -117,23 +143,10 @@ export default function Login(){
                                 onChangeText={(text) => setNome(text)}
 
                             />
-                        </View>
-                        <View style={styles.inputWrapper}>
-                            <Text style={styles.Text}>Apelido</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder='Digite o seu Apelido'
-                                value={sobreNome}
-                                onChangeText={(text) => setSobreNome(text)}
-                            />
-                        </View>
-                    </View>
-                </View>
-   
-               
 
                 <Text style={styles.Text}>Seu e-mail</Text>
-                 <TextInput
+                
+                <TextInput
                 placeholder='exemplo@gmail.com'
                 style={styles.input}
                 value={email}
@@ -143,7 +156,7 @@ export default function Login(){
 
             
 
-                <Text style={styles.TextForm}>Senha</Text>
+                <Text style={styles.Text}>Senha</Text>
                 <TextInput
                 style={styles.input}
                 placeholder='Digite a sua senha'
@@ -152,7 +165,7 @@ export default function Login(){
                 onChangeText={(text) => setSenha(text)}
                 />
           
-          <Text style={styles.TextForm}>Senha</Text>
+          <Text style={styles.Text}>Senha</Text>
                 <TextInput
                 style={styles.input}
                 placeholder='Digite a sua senha'
@@ -166,7 +179,7 @@ export default function Login(){
                               style={styles.checkbox}
                               value={isChecked}
                               onValueChange={setChecked}
-                              color={isChecked ? 'rgba(41, 82, 74, 0.9)' : undefined}
+                              color={isChecked ? '#4177FF' : undefined}
                             />
                             <Text style={styles.Textcheck}>
                             Concordo com os termos e condições.

@@ -6,10 +6,14 @@ export default StyleSheet.create({
     container:{
         flex:1,
         paddingHorizontal:24,
-        paddingTop:Constants.statusBarHeight + 64,
+        paddingTop:Constants.statusBarHeight + 24,
+        backgroundColor:"#FFFFFF"
     },
-    containerLogo:{
-      alignItems:"center"
+    logoImag:{
+      justifyContent:"center",
+      width:160,
+      height:150,
+      marginTop:32
     },
     formLogin:{
         paddingTop:8,
@@ -34,16 +38,17 @@ export default StyleSheet.create({
     TextForm:{
         fontSize:16,
         fontWeight:"500",
-        marginTop:32,
-        color:"rgba(25, 25, 27, 0.9)"
+        marginTop:18,
+        color:"rgba(25, 25, 27, 0.7)"
       },
     input: {
-        marginTop:12,
-        borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
-        marginBottom: 20,
-        paddingBottom: 12, // Espaçamento entre o texto e a linha
-        fontSize:16
+        marginTop:8,
+        backgroundColor:"#F8F8F6",
+        fontSize:16,
+        padding:16,
+        borderRadius: 8,
+        outlineStyle: "none",
+
       },
       
       Text:{
@@ -68,9 +73,9 @@ export default StyleSheet.create({
 
       button: {
         borderRadius: 8,
-        paddingVertical: 15,
+        paddingVertical: 16,
         paddingHorizontal: 20,
-        backgroundColor: 'rgba(41, 82, 74, 0.9)',
+        backgroundColor: '#4177FF',
       },
 
     
@@ -89,7 +94,7 @@ export default StyleSheet.create({
         fontSize:15,
         fontWeight:"700",
         marginStart:4,
-        color:"rgba(41, 82, 74, 0.9)",    
+        color:"#4177FF",    
       },
       Text3:{
         fontSize:16,
@@ -128,7 +133,8 @@ export default StyleSheet.create({
       checkView:{
         flexDirection:"row",
         alignItems:"center",
-        marginBottom:8
+        marginBottom:8,
+        marginTop:12
       },
       titlePopUp: {
         fontSize: 16,
@@ -137,22 +143,25 @@ export default StyleSheet.create({
       },
       sim:{
         borderRadius: 8,
-        paddingVertical: 10,
+        paddingVertical: 16,
         paddingHorizontal: 20,
         marginEnd:4,
         marginTop:4,
-        backgroundColor:"rgba(41, 82, 74, 0.9)"
+        backgroundColor:"#4177FF",
+        width:"100%"
       },
       textButton:{
         color:"#FFFFFF"
      },
      inputPopUp: {
       marginTop:8,
-      borderBottomWidth: 2, // Define a largura da linha na parte inferior
-      borderBottomColor: '#254E46', // Define a cor da linha
       marginBottom: 20,
       paddingBottom: 12, // Espaçamento entre o texto e a linha
-      fontSize:16
+      fontSize:16,
+      fontWeight:"500",
+      outlineStyle:"none",
+      backgroundColor:"#F8F8F6",
+      width:'100%'
     },
 
     botoes:{
@@ -162,10 +171,11 @@ export default StyleSheet.create({
   },
   nao:{
     borderRadius: 8,
-    paddingVertical: 10,
+    paddingVertical: 16,
     paddingHorizontal: 20,
     marginTop:4,
-    backgroundColor:"#F8F8F8"
+    width:"100%"
+
   },
 
 });

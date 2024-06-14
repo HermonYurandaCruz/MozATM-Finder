@@ -1,10 +1,9 @@
 import React, {useEffect,useState} from "react";
 import {Image,View,Text,TextInput,TouchableOpacity, FlatList} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation,route } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from './styles';
-import { MaterialIcons,Feather, Ionicons,Entypo  } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons  } from '@expo/vector-icons';
 import * as MailComposer from 'expo-mail-composer';
 import {firebase} from '../../services/firebaseConfig'
 
@@ -41,7 +40,7 @@ export default function Help(){
 
 
   async function loadPerguntas(){
-    const malyRef = firebase.firestore().collection('help');
+    const malyRef = firebase.firestore().collection('helps');
     const querySnapshot = await malyRef
     .get();
     const perguntas = [];
@@ -67,14 +66,12 @@ export default function Help(){
     return(
       <View style={styles.container}>
         <View style={styles.heade}>
-          <Ionicons name="arrow-back-outline" size={24} color="black" onPress={()=>navigation.goBack()} />
+          <Ionicons name="arrow-back-outline" size={28} color="black" onPress={()=>navigation.goBack()} />
           <Text style={styles.Titulo}>Obter ajuda</Text>
         </View>
 
         <Text style={styles.texto}>Perguntas mais Frequentes</Text>
-        <Text style={styles.textoApela}>Navegue abaixo para encontrar respostas para as perguntas mais comuns. Queremos facilitar sua experiência fornecendo
-         informações úteis e claras.</Text>
-
+      
         <FlatList
   data={data}
   showsVerticalScrollIndicator={false}
@@ -85,7 +82,7 @@ export default function Help(){
     return (
       <>
         <View style={styles.CardBank}>
-          <Text style={styles.questao}>{perguntas.questao}</Text>
+          <Text style={styles.questao}>{perguntas.pergunta}</Text>
           <TouchableOpacity onPress={() => toggleExpand(perguntas.id)}>
             <MaterialIcons
               name={isExpanded ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}

@@ -10,13 +10,13 @@ import 'firebase/compat/storage'
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBYCem9eSQGVn8bB_BGQzeUOkRwxoxAyOg",
-  authDomain: "malyfinder.firebaseapp.com",
-  projectId: "malyfinder",
-  storageBucket: "malyfinder.appspot.com",
-  messagingSenderId: "82734607591",
-  appId: "1:82734607591:web:5096490c4d0b69051a0642",
-  measurementId: "G-NCXFD7GDHT"
+  apiKey: "AIzaSyCmhp87JmCGb6Ti9mlJboCr9RvRde45TFM",
+  authDomain: "paginas-africanas.firebaseapp.com",
+  projectId: "paginas-africanas",
+  storageBucket: "paginas-africanas.appspot.com",
+  messagingSenderId: "1052536161394",
+  appId: "1:1052536161394:web:280af7b89b2dc40e71eeeb",
+  measurementId: "G-GX6TDRR19W"
 };
 
 if(!firebase.apps.length){

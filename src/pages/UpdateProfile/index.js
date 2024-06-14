@@ -1,18 +1,15 @@
 import React, { useState,useEffect } from 'react';
-import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text} from 'react-native';
+import {View,ActivityIndicator,TouchableOpacity , Image, TextInput,Text, ScrollView} from 'react-native';
 import { useNavigation,useRoute } from '@react-navigation/native';
-import * as ImageManipulator from 'expo-image-manipulator';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Dropdown} from 'react-native-element-dropdown'
 
-import { Ionicons,Octicons,MaterialCommunityIcons  } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
+import { Ionicons,AntDesign} from '@expo/vector-icons';
 
 import {firebase} from '../../services/firebaseConfig'
 
 import styles from './styles';
 
 
-import perfilImg from '../../../src/assets/perfil.png';
 
 
 export default function UpdateProfile(){
@@ -27,16 +24,34 @@ export default function UpdateProfile(){
     const [fotoURL,setFotoURL]= useState('')
     const [imagemURI, setImagemURI] = useState(null);
     
-
+    const [descricao, setDescricao] = useState('')
+    const [contacto, setContacto] = useState('')
+    const [whatsapp, setWhatsapp] = useState('')
    
     const [loading, setLoading] = useState(false);
     const [loading2, setLoading2] = useState(false);
 
+    const [loadingImg, setLoadingImg] = useState(false);
+
+
     const [showText, setShowText] = useState(true);
     const [errorText, setErrorText] = useState('');
 
+    const [localizacao, setLocalizacao] = useState('');
+    const [isFocusLocalizacao, setIsFocusLocalizacao] = useState(false);
+
+    const dataLocalizacao=[
+      { id: 11, nome: 'Cidade de Maputo', value: 'Cidade de Maputo' },
+      { id: 1, nome: 'Maputo ', value: 'Maputo' },{ id: 2, nome: 'Gaza', value: 'Gaza' },
+      { id: 3, nome: 'Inhambane', value: 'Inhambane' },{ id: 4, nome: 'Sofala', value: 'Sofala' },
+      { id: 5, nome: 'Manica', value: 'Manica' },{ id: 6, nome: 'Tete', value: 'Tete' },
+      { id: 7, nome: 'Zambézia', value: 'Zambézia' },{ id: 8, nome: 'Nampula', value: 'Nampula' },
+      { id: 9, nome: 'Cabo Delgado', value: 'Cabo Delgado' },{ id: 10, nome: 'Niassa', value: 'Niassa' },
+      
+  
+    ]
+
     const carregarDadosAtuais = async (itemId) => {
-        console.log('id do usuario',itemId)
         try {
           const userRef = firebase.firestore().collection('users').doc(itemId);
           const userDoc = await userRef.get();
@@ -45,6 +60,11 @@ export default function UpdateProfile(){
             const userData = userDoc.data();
             setNome(userData.nome || '');
             setSobreNome(userData.sobreNome || '');
+            setDescricao(userData.descricao);
+            setLocalizacao(userData.localizacao);
+            setContacto(userData.contacto);
+            setWhatsapp(userData.whatsapp);
+            setFotoURL(userData.fotoPerfil)
           } else {
             console.error('Usuário não encontrado.');
           }
@@ -53,25 +73,12 @@ export default function UpdateProfile(){
         }
       };
 
-      const AsyncStorageUpdate= async (nome,sobreNome,fotoURL)=>{
-        const currentData = await AsyncStorage.getItem('userData');
-        const userData = JSON.parse(currentData);
-
-                // Modificar apenas os campos necessários
-        userData.nome = nome;
-        userData.sobreNome = sobreNome;
-        userData.fotoURL = fotoURL;
-
-        await AsyncStorage.setItem('userData', JSON.stringify(userData));
-
-      }
-      
+ 
 
 
     const handleRegister = async () => {
-
-        if (!nome || !sobreNome ) {
-            setErrorText('Por favor, preencha todos os campos.');
+        if (!nome || !contacto ) {
+            setErrorText('Por favor, preencha os campos obrigatorios.');
             return;
           }
 
@@ -86,13 +93,17 @@ export default function UpdateProfile(){
           if(fotoURL){
             await userRef.update({
               nome: nome,
-              sobreNome: sobreNome,
-              fotoURL: fotoURL,
+              fotoPerfil: fotoURL,
+              contacto:contacto,
+              whatsapp:whatsapp
             });
           }else{
             await userRef.update({
               nome: nome,
-              sobreNome: sobreNome,
+              descricao:descricao,
+              localizacao:localizacao,
+              contacto:contacto,
+              whatsapp:whatsapp
             });
           }
        
@@ -112,63 +123,61 @@ export default function UpdateProfile(){
       };
 
 
-      // Verifica se o acesso à galeria está permitido e permite se necessário
-const getPermissionAsync = async () => {
-  if (Platform.OS !== 'web') {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      alert('É necessário permitir acesso à galeria para selecionar uma foto.');
-      return false;
-    }
-    return true;
-  }
-  return false;
-};
-    
+
 
 const selecionarFoto = async () => {
-  setLoading2(true);
-
-  console.log('entrou na galeria')
-  const permissao = await getPermissionAsync();
-  if (!permissao) return;
-
   try {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
+    setLoading2(true);
+
+    // Criar um elemento input de tipo arquivo
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*'; 
+    input.multiple = false; 
+
+    // Aguardar o evento de mudança no input de arquivo
+    const file = await new Promise((resolve) => {
+      input.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        resolve(file);
+      });
+      input.click();
     });
 
-    const selectedImage = result.assets[0]; // Obter a primeira imagem selecionada, se houver
-
-    if (selectedImage && selectedImage.uri) {
-      const manipResult = await ImageManipulator.manipulateAsync(
-        selectedImage.uri,
-        [{ resize: { width: 800, height: 800 } }], // Redimensionar para 800x800 (ajuste conforme necessário)
-        { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // Compressão de 70% em formato JPEG
-      );
-
-      const response = await fetch(manipResult.uri);
-      const blob = await response.blob();
-
-      const numeroAleatorio = Math.floor(Math.random() * 1000000);
-      const idFoto = `${itemId}_${numeroAleatorio}`;
-
-      const storageRef = firebase.storage().ref().child(`fotos_perfil/${idFoto}`);
-      await storageRef.put(blob);
-      const fotoURL = await storageRef.getDownloadURL();
-
-      setImagemURI(manipResult.uri);
-      setFotoURL(fotoURL);
-      setLoading2(false);
-
+    if (file) {
+      await enviarImagemAoFirebase(file);
     }
+
+    setLoading2(false);
   } catch (error) {
     console.error('Erro ao selecionar a foto:', error);
+    setLoading2(false);
   }
 };
+
+const enviarImagemAoFirebase = async (selectedImage) => {
+  const numeroAleatorio = Math.floor(Math.random() * 1000000);
+  const idFoto = `${itemId}_${numeroAleatorio}`;
+
+  // Obter a URL temporária da imagem
+  const fotoURL = URL.createObjectURL(selectedImage);
+
+  // Enviar a imagem para o Firebase Storage
+  const response = await fetch(fotoURL);
+  const blob = await response.blob();
+  const storageRef = firebase.storage().ref().child(`fotos_perfil/${idFoto}`);
+  await storageRef.put(blob);
+  const fotoDownloadURL = await storageRef.getDownloadURL();
+
+  // Atualizar o estado com a URL da imagem
+  setImagemURI(fotoDownloadURL);
+  setFotoURL(fotoDownloadURL);
+
+  // Retornar a URL da foto
+  return fotoDownloadURL;
+};
+
+
 
 
 
@@ -181,30 +190,35 @@ const selecionarFoto = async () => {
 
       useEffect(() => {
         carregarDadosAtuais(itemId);
-        getPermissionAsync();
       }, [itemId]);
 
       
     return(
-        <View style={styles.container}>
+      
+        <View 
+        style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
+                    <Ionicons name="arrow-back-outline" size={28} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
                     <Text style={styles.Titulo}>Editar Perfil</Text>
                 </View>
- 
-                {imagemURI ? (
-                  <View>
-                                      <Image style={styles.ImgaEscolhida} source={{ uri: imagemURI }}  />
-                                      {loading2 && (
-                  <ActivityIndicator size="small"  color="rgba(25, 25, 27, 0.8)" style={styles.loadingIndicator} />
-                )}
+
+                <ScrollView showsVerticalScrollIndicator={false}  >
+                  <View style={{alignItems:"center"}}>
+                    <View style={{flexDirection:"row"}}>
+                    <Image style={{width:100,height:100, borderRadius:8,padding:10,borderRadius:100}} resizeMode='contain' source={{uri:fotoURL}}></Image>
+                    {loading2 && (
+                        <View style={styles.loadingContainer}>
+                        <ActivityIndicator size="small" color="rgba(0, 0, 0, 0.7)" />
+                        </View>
+                    )}
+                    <TouchableOpacity style={{position:"absolute",marginTop:80,marginStart:80}} onPress={selecionarFoto}>
+                      <AntDesign name="edit" size={24} color="black" />
+                  </TouchableOpacity>
+                    </View>
                   </View>
-                  
-                ) : (
-                  <TouchableOpacity onPress={selecionarFoto}>
-                  <Ionicons style={styles.ImgaEscolhida} name="person-circle-outline" size={100} color="rgba(41, 82, 74, 0.9)" /> 
-                 </TouchableOpacity>
-                )}
+                
+ 
+               
                 <Text style={styles.Text}>Atualizar Nome</Text>
                  <TextInput
                 placeholder='atualizar o seu nome'
@@ -213,13 +227,24 @@ const selecionarFoto = async () => {
                 onChangeText={(text) => setNome(text)}
                 />
 
-                <Text style={styles.Text}>Atualizar Apelido</Text>
-                 <TextInput
-                placeholder='Atualizar Apelido'
-                style={styles.input}
-                value={sobreNome}
-                onChangeText={(text) => setSobreNome(text)}
-                />
+                
+        <Text style={styles.Text}>Seu contacto</Text>
+        <TextInput
+        placeholder='ex:8XXXXXXXX'
+        style={styles.input}
+        value={contacto}
+        onChangeText={(text) => setContacto(text)}
+        />
+
+        <Text style={styles.Text}>Seu whatsapp(opcional)</Text>
+        <TextInput
+        placeholder='ex:8XXXXXXXX'
+        style={styles.input}
+        value={whatsapp}
+        onChangeText={(text) => setWhatsapp(text)}
+        />
+
+
 
 
           <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={loading}>
@@ -233,11 +258,7 @@ const selecionarFoto = async () => {
             </TouchableOpacity>
             {errorText !== '' && <Text style={styles.errorText}>{errorText}</Text>}
 
-                    
-
-               
-           
-                
+            </ScrollView>
 
                              
      </View>

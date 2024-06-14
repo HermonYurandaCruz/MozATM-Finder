@@ -5,8 +5,8 @@ export default StyleSheet.create({
  
     container:{
         flex:1,
-        paddingHorizontal:24,
-        paddingTop:Constants.statusBarHeight +16,
+        paddingHorizontal:16,
+        paddingTop:8,
     },
     heade:{
     flexDirection: "row",
@@ -68,11 +68,12 @@ export default StyleSheet.create({
     input: {
         marginTop:12,
         borderBottomWidth: 2, // Define a largura da linha na parte inferior
-        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
+        borderBottomColor: 'rgba(19, 64, 116, 1)', // Define a cor da linha
         marginBottom: 20,
         paddingBottom: 12, // Espaçamento entre o texto e a linha
         fontSize:16,
-        width: '100%', // Isso faz com que o input não mude de tamanho
+        width: '100%', // Isso faz com que o input não mude de tamanho,
+        outlineStyle: "none",
 
       },
       Text:{
@@ -94,7 +95,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: 'rgba(41, 82, 74, 0.9)',
+        backgroundColor: 'rgba(19, 64, 116, 1)',
       },
 
       buttonGoogle:{

@@ -7,9 +7,6 @@ import {firebase} from '../../services/firebaseConfig'
 import styles from './styles';
 
 
-import logoGoogle from '../../../src/assets/google.png'
-
-
 export default function UpdatePassword(){
 
     const navigation = useNavigation();
@@ -45,7 +42,6 @@ export default function UpdatePassword(){
           }
       
           await user.updatePassword(novaSenha);
-          console.log('Senha alterada com sucesso!');
           navigation.goBack()          
       
         } catch (error) {
@@ -59,7 +55,7 @@ export default function UpdatePassword(){
     return(
         <View style={styles.container}>
                 <View style={styles.heade}>
-                    <Ionicons name="arrow-back-outline" size={24} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
+                    <Ionicons name="arrow-back-outline" size={28} color="rgba(25, 25, 27, 0.9)" onPress={()=>navigation.goBack()} />
                     <Text style={styles.Titulo}>Mudar senha</Text>
                 </View>
  

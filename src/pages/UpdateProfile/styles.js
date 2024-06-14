@@ -5,8 +5,9 @@ export default StyleSheet.create({
  
     container:{
         flex:1,
-        paddingHorizontal:24,
-        paddingTop:Constants.statusBarHeight +16,
+        paddingHorizontal:16,
+        paddingTop:8,
+        marginBottom:24
     },
     heade:{
     flexDirection: "row",
@@ -38,14 +39,13 @@ export default StyleSheet.create({
         width: '45%', // Definindo uma largura fixa para os inputs
       },
   
-      input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        width: '100%', // Isso faz com que o input preencha a largura definida
-      },
+
     
+      inputSearchStyle:{
+        width: '100%', 
+        outlineStyle: "none",
+      },
+      
     formLogin:{
         paddingTop:8,
         justifyContent: 'space-between',
@@ -75,11 +75,12 @@ export default StyleSheet.create({
     input: {
         marginTop:12,
         borderBottomWidth: 2, 
-        borderBottomColor: 'rgba(41, 82, 74, 0.9)', // Define a cor da linha
+        borderBottomColor: 'rgba(19, 64, 116, 1)', // Define a cor da linha
         marginBottom: 20,
         paddingBottom: 12,
         fontSize:16,
         width: '100%', 
+        outlineStyle: "none",
       },
       Text:{
         fontSize:16,
@@ -105,7 +106,7 @@ export default StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         paddingHorizontal: 20,
-        backgroundColor: 'rgba(41, 82, 74, 0.9)',
+        backgroundColor: 'rgba(19, 64, 116, 1)',
       },
 
       buttonGoogle:{
