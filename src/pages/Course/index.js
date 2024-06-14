@@ -3,12 +3,9 @@ import { TouchableOpacity,View,Text,Image,FlatList ,ScrollView} from "react-nati
 import styles from './styles';
 import { useNavigation,useRoute } from "@react-navigation/native";
 import { Ionicons,Feather,MaterialIcons,SimpleLineIcons,FontAwesome  } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {firebase} from '../../services/firebaseConfig'
 
-import imgGraphic from '../../assets/graphic-design.png';
 import imgVideo from '../../assets/streaming.png'
-import imgDoc from '../../assets/document.png'
 
 
 export default function Course(){
@@ -42,7 +39,7 @@ export default function Course(){
 
 
     async function loadLessons(idSubject){
-        const malyRef = firebase.firestore().collection('Course').doc(id).collection('subjects').doc(idSubject).collection('lessons');
+        const malyRef = firebase.firestore().collection('Course').doc(id).collection('subjects').doc(idSubject).collection('lessons');t
         const querySnapshot = await malyRef
         .get();
         const perguntas = [];
